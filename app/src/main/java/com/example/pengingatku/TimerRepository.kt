@@ -50,10 +50,16 @@ class TimerRepository {
                 hours = "12",
                 minutes = "03",
                 timeAdverb = AdverbOfTime.AM,
-            )
+            ),
+            TimerInformation(
+                id = 4,
+                label = "Study",
+                hours = "12",
+                minutes = "05",
+                timeAdverb = AdverbOfTime.AM,
+                pickedDays = Day.entries
+            ),
         )
-
-
 
         try {
             _timerData.emit(StateHelper.Success(timerDatas))

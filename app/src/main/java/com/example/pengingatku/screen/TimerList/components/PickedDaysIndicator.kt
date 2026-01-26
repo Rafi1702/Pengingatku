@@ -20,26 +20,31 @@ import com.example.pengingatku.Day
 fun PickedDaysIndicator(daysPicked: List<Day>) {
     val boxSize = 4.dp
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Day.entries.map {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                if (it in daysPicked) Box(
-                    modifier = Modifier
-                        .size(boxSize) // Equal width and height
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(50)
+        if (daysPicked.containsAll(Day.entries)) {
+            Text("Every Day")
+        } else {
+            Day.entries.map {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (it in daysPicked) Box(
+                        modifier = Modifier
+                            .size(boxSize) // Equal width and height
+                            .background(
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(50)
+                            )
+                    ) else Box(modifier = Modifier.size(boxSize))
+
+                    Text(
+                        it.name.first().toString(),
+                        style = if (it in daysPicked) MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary) else MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = FontWeight.Thin
                         )
-                ) else Box(modifier = Modifier.size(boxSize))
-
-                Text(
-                    it.name.first().toString(),
-                    style = if (it in daysPicked) MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary) else MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Thin
                     )
-                )
 
+                }
             }
         }
+
     }
 }

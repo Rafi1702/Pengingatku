@@ -1,5 +1,6 @@
 package com.example.pengingatku
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,10 +15,13 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -46,7 +50,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.pengingatku.screen.StopWatchScreen
+import com.example.pengingatku.screen.StopWatch.StopWatchScreen
 import com.example.pengingatku.screen.TimerEdit.TimerEditScreen
 import com.example.pengingatku.screen.TimerList.TimerListScreen
 import com.example.pengingatku.ui.theme.PengingatkuTheme
@@ -103,6 +107,18 @@ fun Main() {
                                 contentDescription = "Back"
                             )
                         }
+                    }
+                }, actions = {
+                    IconButton(
+                        onClick = {
+                            // Panggil fungsi repository.getTimerDatas() atau navigasi di sini
+                        },
+                        modifier = Modifier.size(48.dp) // Ukuran standar touch target
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Add New Timer",
+                            )
                     }
                 })
         }, bottomBar = {
