@@ -32,8 +32,7 @@ import com.example.pengingatku.TimerInformation
 fun TimerCard(
     timerInformation: TimerInformation,
     onSelectedTimerInfo: (Int) -> Unit,
-//    onNavigate: (TimerInformation) -> Unit,
-    onNavigate: ()->Unit
+    onNavigate: () -> Unit
 ) {
     val (id, label, hours, _, timeAdverb, isChecked, pickedDays) = timerInformation
 

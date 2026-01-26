@@ -7,8 +7,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class BottomBarNavigationScreen( val route: String,val icon: ImageVector){
-    TIMER_LIST("timer",  Icons.Default.Info),
-    STOP_WATCH("watch", Icons.Default.AccessAlarm),
+    TIMER_LIST("Timer",  Icons.Default.Info),
+    STOP_WATCH("Watch", Icons.Default.AccessAlarm),
 }
 
 

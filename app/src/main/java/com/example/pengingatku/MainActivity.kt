@@ -116,7 +116,7 @@ fun Main() {
                     BottomBarNavigationScreen.entries.forEachIndexed { _, screen ->
                         NavigationBarItem(
                             selected = currentRoute == screen.route,
-                            label = { Text(screen.name) },
+                            label = { Text(screen.route) },
                             icon = { Icon(screen.icon, null) },
                             onClick = {
                                 navController.navigate(screen.route) {
