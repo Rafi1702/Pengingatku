@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimerListScreen(
     timerRepository: TimerRepository = TimerRepository(),
-    onNavigate: () -> Unit
+    onNavigate: (Int) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -61,7 +61,7 @@ fun TimerListScreen(
                         items(times, key = { it.id }) { data ->
                             TimerCard(
                                 timerInformation = data,
-                                onNavigate = onNavigate,
+                                onNavigate = { onNavigate(data.id) },
                                 onSelectedTimerInfo = { id ->
                                     scope.launch {
                                         timerRepository.selectedTimer(id)

@@ -14,8 +14,12 @@ sealed class ScreenNavigation(val route: String) {
         STOP_WATCH("Stopwatch", Icons.Default.AccessAlarm),
     }
 
-    object AddTimer : ScreenNavigation("Add Timer")
-    object EditTimer : ScreenNavigation("edit_timer/{timerId}")
+    object AddTimer : ScreenNavigation("add_timer")
+    object EditTimer : ScreenNavigation("edit_timer/{timerId}") {
+        fun createRoute(timerId: Int): String {
+            return route.replace("{timerId}", timerId.toString())
+        }
+    }
 }
 
 

@@ -25,9 +25,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.decapitalize
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import com.example.pengingatku.Day
 import com.example.pengingatku.LocalModifier
+import java.util.Locale
+import java.util.Locale.getDefault
 
 @Composable
 fun BottomEditTimerContainer(pickedDaysByUser: List<Day>) {
@@ -43,7 +47,10 @@ fun BottomEditTimerContainer(pickedDaysByUser: List<Day>) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Setiap ${pickedDays.value.joinToString(separator = ",") { it.name.substring(0,3) }}")
+                    val pickedDaysTextDisplay =
+                        if (pickedDays.value.containsAll(Day.entries)) "Every Day" else pickedDays.value.takeCharacterAndLowerCase()
+                    
+                    Text("Setiap $pickedDaysTextDisplay")
                     IconButton(onClick = {
 
                     }) {
@@ -82,4 +89,11 @@ fun DayPickerChip(daySelected: List<Day>, onPickedDays: (Day) -> Unit) {
         }
     }
 
+}
+
+fun List<Day>.takeCharacterAndLowerCase() = this.joinToString(separator = ", ") {
+    it.name.first().toString() + it.name.substring(
+        1,
+        3
+    ).lowercase(getDefault())
 }

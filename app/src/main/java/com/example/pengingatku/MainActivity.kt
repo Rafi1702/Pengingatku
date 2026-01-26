@@ -219,7 +219,7 @@ fun AppNavHost(
 
                 TimerListScreen(
                     timerRepository = timerRepository,
-                    onNavigate = { navController.navigate(ScreenNavigation.EditTimer.route) }
+                    onNavigate = { timerId -> navController.navigate(ScreenNavigation.EditTimer.createRoute(timerId)) }
                 )
             }
             composable(ScreenNavigation.BottomBarScreenNavigation.STOP_WATCH.route) { StopWatchScreen() }
