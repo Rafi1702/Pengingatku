@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.TimerList.components
+package com.example.pengingatku.screen.timer_list.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,11 +19,11 @@ import com.example.pengingatku.Day
 @Composable
 fun PickedDaysIndicator(daysPicked: List<Day>) {
     val boxSize = 4.dp
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-        if (daysPicked.containsAll(Day.entries)) {
-            Text("Every Day")
-        } else {
+    if(daysPicked.containsAll(Day.entries)){
+        Text("Every Day")
+    }else{
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Day.entries.map {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     if (it in daysPicked) Box(
@@ -44,7 +44,8 @@ fun PickedDaysIndicator(daysPicked: List<Day>) {
 
                 }
             }
-        }
 
+        }
     }
+
 }

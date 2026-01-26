@@ -1,6 +1,5 @@
 package com.example.pengingatku
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +11,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -34,6 +33,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -50,12 +50,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.pengingatku.screen.StopWatch.StopWatchScreen
-import com.example.pengingatku.screen.TimerEdit.TimerEditScreen
-import com.example.pengingatku.screen.TimerList.TimerListScreen
+import com.example.pengingatku.screen.stop_watch.StopWatchScreen
+import com.example.pengingatku.screen.timer_edit.TimerEditScreen
+import com.example.pengingatku.screen.timer_list.TimerListScreen
 import com.example.pengingatku.ui.theme.PengingatkuTheme
-import com.example.pengingatku.utils.BaseNavigationScreen
-import com.example.pengingatku.utils.BottomBarNavigationScreen
+
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.pengingatku.utils.ScreenNavigation
 
 
 class MainActivity : ComponentActivity() {
@@ -80,7 +83,7 @@ val LocalModifier = staticCompositionLocalOf<Modifier> { Modifier }
 @Composable
 fun Main() {
     val navController = rememberNavController()
-    val navigationBottomBar = remember { BottomBarNavigationScreen.entries.map { it.route } }
+    val navigationBottomBar = ScreenNavigation.BottomBarScreenNavigation.entries.map { it.route }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -92,10 +95,17 @@ fun Main() {
 
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(), topBar = {
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                ),
                 title = {
-                    Text("Alarm")
+                    Text(currentRoute ?: "Nothing")
                 },
                 navigationIcon = {
                     if (!isBottomBarVisible) {
@@ -111,17 +121,18 @@ fun Main() {
                 }, actions = {
                     IconButton(
                         onClick = {
-                            // Panggil fungsi repository.getTimerDatas() atau navigasi di sini
+
                         },
-                        modifier = Modifier.size(48.dp) // Ukuran standar touch target
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.MoreVert,
                             contentDescription = "Add New Timer",
-                            )
+                        )
                     }
                 })
-        }, bottomBar = {
+        },
+        bottomBar = {
 
             AnimatedVisibility(
                 visible = isBottomBarVisible,
@@ -129,7 +140,7 @@ fun Main() {
                 exit = slideOutVertically(targetOffsetY = { it })
             ) {
                 NavigationBar {
-                    BottomBarNavigationScreen.entries.forEachIndexed { _, screen ->
+                    ScreenNavigation.BottomBarScreenNavigation.entries.forEachIndexed { _, screen ->
                         NavigationBarItem(
                             selected = currentRoute == screen.route,
                             label = { Text(screen.route) },
@@ -157,7 +168,7 @@ fun Main() {
                     modifier = Modifier.offset(y = 40.dp),
                     containerColor = MaterialTheme.colorScheme.primary,
                     onClick = {
-                        navController.navigate(route = BaseNavigationScreen.AddTimer.route)
+                        navController.navigate(route = ScreenNavigation.AddTimer.route)
                     },
                     shape = CircleShape,
                     elevation = FloatingActionButtonDefaults.elevation(8.dp)
@@ -200,25 +211,35 @@ fun AppNavHost(
 
         /* Kode Di Dalam Builder NavHost (lambda yang dibutuhkan dari NavHost)*/
         navigation(
-            startDestination = BottomBarNavigationScreen.TIMER_LIST.route,
+            startDestination =ScreenNavigation.BottomBarScreenNavigation.TIMER_LIST.route,
             route = "main_graph"
         ) {
 
-            composable(BottomBarNavigationScreen.TIMER_LIST.route) {
+            composable(ScreenNavigation.BottomBarScreenNavigation.TIMER_LIST.route) {
 
                 TimerListScreen(
                     timerRepository = timerRepository,
-                    onNavigate = { navController.navigate(BaseNavigationScreen.EditTimer.route) }
+                    onNavigate = { navController.navigate(ScreenNavigation.EditTimer.route) }
                 )
             }
-            composable(BottomBarNavigationScreen.STOP_WATCH.route) { StopWatchScreen() }
+            composable(ScreenNavigation.BottomBarScreenNavigation.STOP_WATCH.route) { StopWatchScreen() }
         }
 
-        composable(BaseNavigationScreen.EditTimer.route) {
-            TimerEditScreen(onNavigateToTimerList = {
-                navController.navigate(BottomBarNavigationScreen.TIMER_LIST.route)
-            })
+        composable(
+            route = ScreenNavigation.EditTimer.route, arguments = listOf(
+            navArgument("timerId") { type = NavType.IntType }
+        )) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("timerId") ?: 0
+            TimerEditScreen(
+                onNavigateToTimerList = {
+                    navController.navigate(ScreenNavigation.BottomBarScreenNavigation.TIMER_LIST.route)
+                },
+                timerRepository = timerRepository,
+                timerId = id
+
+            )
         }
+
 
 //        composable(BaseNavigationScreen.AddTimer.route) {
 //            AddTimerScreen(toTimerGrids = {

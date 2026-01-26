@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.TimerEdit
+package com.example.pengingatku.screen.timer_edit
 
 
 import androidx.compose.foundation.background
@@ -13,21 +13,30 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pengingatku.AdverbOfTime
 import com.example.pengingatku.LocalModifier
-import com.example.pengingatku.screen.TimerEdit.components.HourPicker
-import com.example.pengingatku.screen.TimerEdit.components.PickerType
+import com.example.pengingatku.TimerRepository
+import com.example.pengingatku.screen.timer_edit.components.BottomEditTimerContainer
+import com.example.pengingatku.screen.timer_edit.components.HourPicker
+import com.example.pengingatku.screen.timer_edit.components.PickerType
+import com.example.pengingatku.utils.StateHelper
 
 @Composable
-fun TimerEditScreen(onNavigateToTimerList: () -> Unit) {
-
-    val hour = remember{mutableStateOf(0)}
-    val minute = remember{mutableStateOf(0)}
+fun TimerEditScreen(
+    onNavigateToTimerList: () -> Unit,
+    timerId: Int,
+    timerRepository: TimerRepository
+) {
+    val uiState by timerRepository.timerData.collectAsStateWithLifecycle()
+    val hour = remember { mutableStateOf(0) }
+    val minute = remember { mutableStateOf(0) }
 
     Column(LocalModifier.current) {
         Row(
@@ -43,7 +52,7 @@ fun TimerEditScreen(onNavigateToTimerList: () -> Unit) {
                 })
             }
 
-            WeightBox (.5f){
+            WeightBox(.5f) {
                 Box(
                     modifier = Modifier
                         .size(8.dp)
@@ -61,21 +70,24 @@ fun TimerEditScreen(onNavigateToTimerList: () -> Unit) {
 
         }
 
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.secondary)
         ) {
-            val timeAdverb = if(hour.value > PickerType.Hour.maxValue) AdverbOfTime.AM.name else AdverbOfTime.PM.name
 
-            Text("${hour.value} : ${minute.value} $timeAdverb ")
+            when (val state = uiState) {
+                is StateHelper.Success -> BottomEditTimerContainer(
+                    state.data.find { it.id == timerId }?.pickedDays ?: listOf()
+                )
+
+                else -> {}
+            }
+
+
         }
     }
-
-
 }
 
 @Composable

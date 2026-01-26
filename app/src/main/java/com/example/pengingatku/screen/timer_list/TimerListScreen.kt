@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.TimerList
+package com.example.pengingatku.screen.timer_list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pengingatku.LocalModifier
 import com.example.pengingatku.TimerRepository
-import com.example.pengingatku.screen.TimerList.components.TimerCard
+import com.example.pengingatku.screen.timer_list.components.TimerCard
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
 
