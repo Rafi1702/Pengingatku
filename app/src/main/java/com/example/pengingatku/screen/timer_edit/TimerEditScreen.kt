@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pengingatku.AdverbOfTime
 import com.example.pengingatku.LocalModifier
+import com.example.pengingatku.TimerInformation
 import com.example.pengingatku.TimerRepository
 import com.example.pengingatku.screen.timer_edit.components.BottomEditTimerContainer
 import com.example.pengingatku.screen.timer_edit.components.HourPicker
@@ -35,8 +40,20 @@ fun TimerEditScreen(
     timerRepository: TimerRepository
 ) {
     val uiState by timerRepository.timerData.collectAsStateWithLifecycle()
-    val hour = remember { mutableStateOf(0) }
-    val minute = remember { mutableStateOf(0) }
+
+    val timerInformation = remember(uiState) {
+        val initialData = (uiState as? StateHelper.Success)?.data?.find { it.id == timerId }
+        mutableStateOf(
+            initialData ?: TimerInformation(
+                id = timerId,
+                label = "Not Available",
+                hours = 0,
+                minutes = 0,
+                timeAdverb = AdverbOfTime.AM,
+                pickedDays = emptyList()
+            )
+        )
+    }
 
     Column(LocalModifier.current) {
         Row(
@@ -48,7 +65,7 @@ fun TimerEditScreen(
             ) {
             WeightBox(2f) {
                 HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
-                    hour.value = it
+                    timerInformation.value.copy(hours = it)
                 })
             }
 
@@ -63,7 +80,7 @@ fun TimerEditScreen(
 
             WeightBox(2f) {
                 HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
-                    minute.value = it
+                    timerInformation.value.copy(minutes = it)
                 })
             }
 
@@ -74,21 +91,49 @@ fun TimerEditScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-        ) {
+                .background(
+                    MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp,
+                    ),
+                ),
 
-            when (val state = uiState) {
-                is StateHelper.Success -> BottomEditTimerContainer(
-                    state.data.find { it.id == timerId }?.pickedDays ?: listOf()
-                )
+            ) {
 
-                else -> {}
-            }
+
+            BottomEditTimerContainer(
+                timerInformation.value.pickedDays
+            )
 
 
         }
+
+        TextField(value = timerInformation.value.label, onValueChange = {
+
+        })
     }
+//    val hour = remember { mutableStateOf(0) }
+//    val minute = remember { mutableStateOf(0) }
+//    val timerTitle = remember {
+//        mutableStateOf("")
+//    }
+//    LaunchedEffect(Unit){
+//
+//       val data = when(val state = uiState){
+//            is StateHelper.Success ->  state.data.find{it.id == timerId}
+//          else -> null
+//        }
+//
+//
+//        hour.value = data?.hours ?: 0
+//        minute.value = data?.minutes ?: 0
+//        timerTitle.value = data?.label ?: "Not Available"
+//    }
+
+
 }
+
 
 @Composable
 fun RowScope.WeightBox(

@@ -30,8 +30,8 @@ class TimerRepository {
             TimerInformation(
                 id = 1,
                 label = "Work",
-                hours = "12",
-                minutes = "03",
+                hours = 12,
+                minutes = 3,
                 timeAdverb = AdverbOfTime.AM,
                 pickedDays = listOf(Day.SUNDAY, Day.MONDAY)
             ),
@@ -39,23 +39,23 @@ class TimerRepository {
             TimerInformation(
                 id = 2,
                 label = "Work",
-                hours = "12",
-                minutes = "03",
+                hours = 12,
+                minutes = 3,
                 timeAdverb = AdverbOfTime.AM,
             ),
 
             TimerInformation(
                 id = 3,
                 label = "Work",
-                hours = "12",
-                minutes = "03",
+                hours = 12,
+                minutes = 3,
                 timeAdverb = AdverbOfTime.AM,
             ),
             TimerInformation(
                 id = 4,
                 label = "Study",
-                hours = "12",
-                minutes = "05",
+                hours = 12,
+                minutes = 3,
                 timeAdverb = AdverbOfTime.AM,
                 pickedDays = Day.entries
             ),
