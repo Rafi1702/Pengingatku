@@ -12,12 +12,12 @@ import kotlin.random.Random
 
 
 class TimerRepository {
-    val _timerData = MutableStateFlow<StateHelper<List<TimerInformation>>>(
+    private val timerData = MutableStateFlow<StateHelper<List<TimerInformation>>>(
         StateHelper.Loading
 
     )
 
-    val timerData = _timerData.asStateFlow()
+    val timerFlow = timerData.asStateFlow()
 
 //    suspend fun deleteTimer(id: Int) {
 //        val updatedTimerData = _timerData.value.map { it }
@@ -62,30 +62,30 @@ class TimerRepository {
         )
 
         try {
-            _timerData.emit(StateHelper.Success(timerDatas))
+            timerData.emit(StateHelper.Success(timerDatas))
 
             Log.d("REPOSITORY", "SUCCESS $timerDatas")
 
         } catch (e: Exception) {
             Log.d("REPOSITORY", "FAILED ${e.message}")
-            _timerData.emit(StateHelper.Failure(e))
+            timerData.emit(StateHelper.Failure(e))
         }
 
 
     }
 
     suspend fun selectedTimer(id: Int) {
-        when(val state = _timerData.value){
+        when(val state = timerData.value){
             is StateHelper.Success ->{
                 val updatedTimerData = state.data.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
-                _timerData.emit(StateHelper.Success(updatedTimerData))
+                timerData.emit(StateHelper.Success(updatedTimerData))
             }
 
             is StateHelper.Failure -> {
                 val err = state.exception
-                _timerData.emit(StateHelper.Failure(err))
+                timerData.emit(StateHelper.Failure(err))
             }
-            else -> {}
+            else ->{}
         }
     }
 }

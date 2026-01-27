@@ -1,6 +1,7 @@
 package com.example.pengingatku.screen.timer_edit
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +40,9 @@ fun TimerEditScreen(
     timerId: Int,
     timerRepository: TimerRepository
 ) {
-    val uiState by timerRepository.timerData.collectAsStateWithLifecycle()
+
+    Log.d("RECOMPOSE", "TIMER EDIT SCREEN")
+    val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
     val timerInformation = remember(uiState) {
         val initialData = (uiState as? StateHelper.Success)?.data?.find { it.id == timerId }
@@ -54,6 +57,7 @@ fun TimerEditScreen(
             )
         )
     }
+
 
     Column(LocalModifier.current) {
         Row(
@@ -103,15 +107,13 @@ fun TimerEditScreen(
 
 
             BottomEditTimerContainer(
-                timerInformation.value.pickedDays
+                timerInformation.value
             )
 
 
         }
 
-        TextField(value = timerInformation.value.label, onValueChange = {
 
-        })
     }
 //    val hour = remember { mutableStateOf(0) }
 //    val minute = remember { mutableStateOf(0) }

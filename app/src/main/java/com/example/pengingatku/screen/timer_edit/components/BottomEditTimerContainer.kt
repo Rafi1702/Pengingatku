@@ -17,12 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,53 +33,88 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.pengingatku.Day
+import com.example.pengingatku.TimerInformation
 import java.util.Locale.getDefault
 
 @Composable
-fun BottomEditTimerContainer(pickedDaysByUser: List<Day>) {
+fun BottomEditTimerContainer(timerInformation: TimerInformation) {
 
-    val pickedDays = remember {
-        mutableStateOf(pickedDaysByUser)
+    val newTimerInformation = remember {
+        mutableStateOf(timerInformation)
     }
+
+    val isValueChanged = remember {
+        derivedStateOf {
+            newTimerInformation.value != timerInformation
+        }
+    }
+
+
+
     LazyColumn(
         Modifier
             .padding(horizontal = 8.dp, vertical = 16.dp)
             .fillMaxHeight(),
     ) {
+
+
         item {
-            Column {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    val pickedDaysTextDisplay =
-                        when {
-                            pickedDays.value.isEmpty() -> "Belum Memilih"
-                            pickedDays.value.containsAll(Day.entries) -> "Setiap Hari"
-                            else -> "Setiap ${pickedDays.value.takeCharacterAndLowerCase()}"
-                        }
-
-
-                    Text(pickedDaysTextDisplay)
-                    IconButton(onClick = {
-
-                    }) {
-                        Icon(Icons.Default.CalendarToday, null)
-                    }
-                }
-
-                Spacer(Modifier.height(8.dp))
-
-                DayPickerChip(pickedDays.value) { day ->
-                    val days = pickedDays.value
-                    if (days.contains(day)) {
-                        pickedDays.value -= day
-                    } else {
-                        pickedDays.value += day
+            val pickedDays = newTimerInformation.value.pickedDays
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val pickedDaysTextDisplay =
+                    when {
+                        pickedDays.isEmpty() -> "Belum Memilih"
+                        pickedDays.containsAll(Day.entries) -> "Setiap Hari"
+                        else -> "Setiap ${pickedDays.takeCharacterAndLowerCase()}"
                     }
 
+
+                Text(pickedDaysTextDisplay)
+                IconButton(onClick = {
+
+                }) {
+                    Icon(Icons.Default.CalendarToday, null)
                 }
+            }
+        }
+
+        item {
+
+            Spacer(Modifier.height(8.dp))
+        }
+
+        item {
+            val pickedDays = newTimerInformation.value.pickedDays
+            DayPickerChip(pickedDays) { day ->
+                if (pickedDays.contains(day)) {
+                    newTimerInformation.value =
+                        newTimerInformation.value.copy(pickedDays = pickedDays.filterNot {
+                            it == day
+                        })
+                } else {
+                    newTimerInformation.value =
+                        newTimerInformation.value.copy(pickedDays = pickedDays + day)
+                }
+
+            }
+        }
+
+        item {
+            val label = newTimerInformation.value.label
+            TextField(value = label, onValueChange = {
+                newTimerInformation.value = newTimerInformation.value.copy(label = it)
+            })
+        }
+
+        item {
+            Button(enabled = isValueChanged.value, onClick = {
+
+            }) {
+                Text("Save")
             }
         }
     }

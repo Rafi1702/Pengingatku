@@ -32,7 +32,7 @@ fun TimerListScreen(
     val scope = rememberCoroutineScope()
 
 
-    val uiState by timerRepository.timerData.collectAsStateWithLifecycle()
+    val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
 
     LaunchedEffect(Unit){

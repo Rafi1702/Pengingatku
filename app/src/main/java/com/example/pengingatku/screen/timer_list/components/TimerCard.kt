@@ -37,57 +37,63 @@ fun TimerCard(
 ) {
     val (id, label, hours, _, timeAdverb, isChecked, pickedDays) = timerInformation
 
-    Column(
+    Box(
         modifier = Modifier
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(CornerSize(16.dp))
+            ).sizeIn(maxWidth = 120.dp)
+            .clickable(onClick = { onNavigate() }).padding(
+                horizontal = 32.dp
+                , vertical = 16.dp
             )
-            .padding(vertical = 16.dp, horizontal = 32.dp)
-            .sizeIn(maxWidth = 120.dp)
-            .clickable(onClick = { onNavigate() }),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+
     ) {
-
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            Text(label, style = MaterialTheme.typography.titleMedium)
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(
-                    "$hours:$hours",
-                    style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    timeAdverb.name,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-            PickedDaysIndicator(pickedDays)
-            Spacer(Modifier.height(8.dp))
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
-            Switch(
-                checked = isChecked,// Current state
-                onCheckedChange = { _ ->
-                    onSelectedTimerInfo(id)
-                },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                ),
-            )
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
+                Text(label, style = MaterialTheme.typography.titleMedium)
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        "$hours:$hours",
+                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        timeAdverb.name,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                PickedDaysIndicator(pickedDays)
+                Spacer(Modifier.height(8.dp))
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+
+                Switch(
+                    checked = isChecked,// Current state
+                    onCheckedChange = { _ ->
+                        onSelectedTimerInfo(id)
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ),
+                )
+
+
+            }
 
 
         }
-
-
     }
 
 
