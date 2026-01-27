@@ -37,8 +37,6 @@ fun TimerListScreen(
     val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
 
-
-
     Box(modifier = LocalModifier.current.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (val state = uiState) {
             is StateHelper.Loading -> {
@@ -51,10 +49,10 @@ fun TimerListScreen(
                 if (times.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier.fillMaxHeight(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(8.dp)
+                        contentPadding = PaddingValues(16.dp)
 
                     ) {
                         items(times, key = { it.id }) { data ->

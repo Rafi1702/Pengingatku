@@ -42,10 +42,11 @@ fun TimerCard(
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(CornerSize(16.dp))
-            ).sizeIn(maxWidth = 120.dp)
-            .clickable(onClick = { onNavigate() }).padding(
-                horizontal = 32.dp
-                , vertical = 16.dp
+            )
+            .clickable(onClick = { onNavigate() })
+            .padding(
+                start = 32.dp,
+                16.dp, 16.dp, 16.dp
             )
 
     ) {
