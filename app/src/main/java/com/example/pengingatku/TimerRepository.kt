@@ -24,6 +24,16 @@ class TimerRepository {
 //        _timerData.emit(updatedTimerData)
 //    }
 
+    suspend fun editTimer(timerInformation: TimerInformation){
+        val timerState = (timerData.value as? StateHelper.Success)?.data
+
+        timerState?.let{ originalTimer ->
+            timerData.emit(StateHelper.Success(originalTimer.map{
+                if(it.id == timerInformation.id) timerInformation else it
+            }))
+        }
+    }
+
     suspend fun getTimerDatas() {
         delay(3000)
         val timerDatas = listOf(

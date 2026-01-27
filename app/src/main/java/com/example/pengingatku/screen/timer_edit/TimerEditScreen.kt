@@ -13,14 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -33,6 +37,7 @@ import com.example.pengingatku.screen.timer_edit.components.BottomEditTimerConta
 import com.example.pengingatku.screen.timer_edit.components.HourPicker
 import com.example.pengingatku.screen.timer_edit.components.PickerType
 import com.example.pengingatku.utils.StateHelper
+import kotlinx.coroutines.launch
 
 @Composable
 fun TimerEditScreen(
@@ -42,22 +47,30 @@ fun TimerEditScreen(
 ) {
 
     Log.d("RECOMPOSE", "TIMER EDIT SCREEN")
+    val scope = rememberCoroutineScope ()
     val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
     val timerInformation = remember(uiState) {
         val initialData = (uiState as? StateHelper.Success)?.data?.find { it.id == timerId }
-        mutableStateOf(
-            initialData ?: TimerInformation(
-                id = timerId,
-                label = "Not Available",
-                hours = 0,
-                minutes = 0,
-                timeAdverb = AdverbOfTime.AM,
-                pickedDays = emptyList()
-            )
+        initialData ?: TimerInformation(
+            id = timerId,
+            label = "Not Available",
+            hours = 0,
+            minutes = 0,
+            timeAdverb = AdverbOfTime.AM,
+            pickedDays = emptyList()
         )
     }
 
+    val newTimerInformation = remember(timerInformation.id) {
+        mutableStateOf(timerInformation)
+    }
+
+    val isValueChanged = remember {
+        derivedStateOf {
+            newTimerInformation.value != timerInformation
+        }
+    }
 
     Column(LocalModifier.current) {
         Row(
@@ -69,7 +82,7 @@ fun TimerEditScreen(
             ) {
             WeightBox(2f) {
                 HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
-                    timerInformation.value.copy(hours = it)
+                    newTimerInformation.value.copy(hours = it)
                 })
             }
 
@@ -84,7 +97,7 @@ fun TimerEditScreen(
 
             WeightBox(2f) {
                 HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
-                    timerInformation.value.copy(minutes = it)
+                    newTimerInformation.value.copy(minutes = it)
                 })
             }
 
@@ -96,7 +109,7 @@ fun TimerEditScreen(
                 .weight(1f)
                 .fillMaxWidth()
                 .background(
-                    MaterialTheme.colorScheme.secondary,
+                    MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(
                         topStart = 16.dp,
                         topEnd = 16.dp,
@@ -107,9 +120,28 @@ fun TimerEditScreen(
 
 
             BottomEditTimerContainer(
-                timerInformation.value
+                timerInformation,
+                onTimerInformationChanged = { timer ->
+                    newTimerInformation.value = timer
+                }
             )
 
+
+        }
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            TextButton(modifier = Modifier.weight(1f), onClick = {
+            }) {
+                Text("Delete")
+            }
+            TextButton(modifier = Modifier.weight(1f), enabled = isValueChanged.value, onClick = {
+                scope.launch{
+                    timerRepository.editTimer(newTimerInformation.value)
+                }
+
+            }) {
+                Text("Save")
+            }
 
         }
 

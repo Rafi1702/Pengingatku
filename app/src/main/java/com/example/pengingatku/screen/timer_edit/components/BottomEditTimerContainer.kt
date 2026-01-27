@@ -1,19 +1,15 @@
 package com.example.pengingatku.screen.timer_edit.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -24,7 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,16 +35,18 @@ import com.example.pengingatku.TimerInformation
 import java.util.Locale.getDefault
 
 @Composable
-fun BottomEditTimerContainer(timerInformation: TimerInformation) {
+fun BottomEditTimerContainer(
+    timerInformation: TimerInformation,
+    onTimerInformationChanged: (TimerInformation) -> Unit,
+) {
 
     val newTimerInformation = remember {
         mutableStateOf(timerInformation)
     }
 
-    val isValueChanged = remember {
-        derivedStateOf {
-            newTimerInformation.value != timerInformation
-        }
+
+    LaunchedEffect(newTimerInformation.value) {
+        onTimerInformationChanged(newTimerInformation.value)
     }
 
 
@@ -55,6 +55,8 @@ fun BottomEditTimerContainer(timerInformation: TimerInformation) {
         Modifier
             .padding(horizontal = 8.dp, vertical = 16.dp)
             .fillMaxHeight(),
+
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
 
@@ -82,10 +84,6 @@ fun BottomEditTimerContainer(timerInformation: TimerInformation) {
             }
         }
 
-        item {
-
-            Spacer(Modifier.height(8.dp))
-        }
 
         item {
             val pickedDays = newTimerInformation.value.pickedDays
@@ -95,28 +93,41 @@ fun BottomEditTimerContainer(timerInformation: TimerInformation) {
                         newTimerInformation.value.copy(pickedDays = pickedDays.filterNot {
                             it == day
                         })
+
                 } else {
                     newTimerInformation.value =
                         newTimerInformation.value.copy(pickedDays = pickedDays + day)
+
                 }
 
+
             }
         }
-
         item {
             val label = newTimerInformation.value.label
-            TextField(value = label, onValueChange = {
-                newTimerInformation.value = newTimerInformation.value.copy(label = it)
-            })
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                ),
+                value = label, onValueChange = {
+                    newTimerInformation.value = newTimerInformation.value.copy(label = it)
+
+
+                })
         }
 
-        item {
-            Button(enabled = isValueChanged.value, onClick = {
 
-            }) {
-                Text("Save")
-            }
+
+        items(items = List(3) {
+            "Something-$it"
+        }, key = { it }) { content ->
+            UserPreferenceTile(content)
         }
+
+
     }
 }
 
