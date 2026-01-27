@@ -1,5 +1,6 @@
 package com.example.pengingatku
 
+import ScreenNavigation
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -56,9 +57,10 @@ import com.example.pengingatku.screen.timer_list.TimerListScreen
 import com.example.pengingatku.ui.theme.PengingatkuTheme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.pengingatku.utils.ScreenNavigation
 
 
 class MainActivity : ComponentActivity() {
@@ -83,7 +85,7 @@ val LocalModifier = staticCompositionLocalOf<Modifier> { Modifier }
 @Composable
 fun Main() {
     val navController = rememberNavController()
-    val navigationBottomBar = ScreenNavigation.BottomBarScreenNavigation.entries.map { it.route }
+    val navigationBottomBar = ScreenNavigation.bottomBarScreen.map { it.route }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -105,7 +107,7 @@ fun Main() {
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 title = {
-                    Text(currentRoute ?: "Nothing")
+                    Text(ScreenNavigation.getTitle(currentRoute))
                 },
                 navigationIcon = {
                     if (!isBottomBarVisible) {
@@ -140,11 +142,11 @@ fun Main() {
                 exit = slideOutVertically(targetOffsetY = { it })
             ) {
                 NavigationBar {
-                    ScreenNavigation.BottomBarScreenNavigation.entries.forEachIndexed { _, screen ->
+                    ScreenNavigation.bottomBarScreen.forEachIndexed { _, screen ->
                         NavigationBarItem(
                             selected = currentRoute == screen.route,
-                            label = { Text(screen.route) },
-                            icon = { Icon(screen.icon, null) },
+                            label = { Text(screen.title) },
+                            icon = { Icon(ImageVector.vectorResource(screen.icon ?: 0), null) },
                             onClick = {
                                 navController.navigate(screen.route) {
                                     popUpTo(navController.graph.findStartDestination().id) {
@@ -209,28 +211,34 @@ fun AppNavHost(
 
         /* Kode Di Dalam Builder NavHost (lambda yang dibutuhkan dari NavHost)*/
         navigation(
-            startDestination =ScreenNavigation.BottomBarScreenNavigation.TIMER_LIST.route,
+            startDestination = ScreenNavigation.TimerList.route,
             route = "main_graph"
         ) {
 
-            composable(ScreenNavigation.BottomBarScreenNavigation.TIMER_LIST.route) {
+            composable(ScreenNavigation.TimerList.route) {
 
                 TimerListScreen(
                     timerRepository = timerRepository,
-                    onNavigate = { timerId -> navController.navigate(ScreenNavigation.EditTimer.createRoute(timerId)) }
+                    onNavigate = { timerId ->
+                        navController.navigate(
+                            ScreenNavigation.EditTimer.createRoute(
+                                timerId
+                            )
+                        )
+                    }
                 )
             }
-            composable(ScreenNavigation.BottomBarScreenNavigation.STOP_WATCH.route) { StopWatchScreen() }
+            composable(ScreenNavigation.StopWatch.route) { StopWatchScreen() }
         }
 
         composable(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
-            navArgument("timerId") { type = NavType.IntType }
-        )) { backStackEntry ->
+                navArgument("timerId") { type = NavType.IntType }
+            )) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("timerId") ?: 0
             TimerEditScreen(
                 onNavigateToTimerList = {
-                    navController.navigate(ScreenNavigation.BottomBarScreenNavigation.TIMER_LIST.route)
+                    navController.navigate(ScreenNavigation.TimerList.route)
                 },
                 timerRepository = timerRepository,
                 timerId = id
