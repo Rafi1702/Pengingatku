@@ -19,10 +19,13 @@ class TimerRepository {
 
     val timerFlow = timerData.asStateFlow()
 
-//    suspend fun deleteTimer(id: Int) {
-//        val updatedTimerData = _timerData.value.map { it }
-//        _timerData.emit(updatedTimerData)
-//    }
+    suspend fun deleteTimer(id: Int) {
+        val timerState = (timerData.value as? StateHelper.Success)?.data
+
+        timerState?.let{ originalTimer ->
+            timerData.emit(StateHelper.Success(originalTimer.filter { it.id != id }))
+        }
+    }
 
     suspend fun editTimer(timerInformation: TimerInformation){
         val timerState = (timerData.value as? StateHelper.Success)?.data
@@ -33,6 +36,8 @@ class TimerRepository {
             }))
         }
     }
+
+
 
     suspend fun getTimerDatas() {
         delay(3000)

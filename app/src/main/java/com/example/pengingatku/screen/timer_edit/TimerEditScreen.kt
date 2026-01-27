@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,7 +48,7 @@ fun TimerEditScreen(
 ) {
 
     Log.d("RECOMPOSE", "TIMER EDIT SCREEN")
-    val scope = rememberCoroutineScope ()
+    val scope = rememberCoroutineScope()
     val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
     val timerInformation = remember(uiState) {
@@ -70,6 +71,24 @@ fun TimerEditScreen(
         derivedStateOf {
             newTimerInformation.value != timerInformation
         }
+    }
+
+    val showDialog = remember { mutableStateOf(false) }
+
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+            },
+            title = { Text("Hapus ${newTimerInformation.value.label}?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    scope.launch {
+                        timerRepository.deleteTimer(newTimerInformation.value.id)
+                    }
+                    showDialog.value = false
+                }) { Text("Hapus") }
+            }
+        )
     }
 
     Column(LocalModifier.current) {
@@ -131,11 +150,12 @@ fun TimerEditScreen(
 
         Row(modifier = Modifier.fillMaxWidth()) {
             TextButton(modifier = Modifier.weight(1f), onClick = {
+                showDialog.value = true
             }) {
                 Text("Delete")
             }
             TextButton(modifier = Modifier.weight(1f), enabled = isValueChanged.value, onClick = {
-                scope.launch{
+                scope.launch {
                     timerRepository.editTimer(newTimerInformation.value)
                 }
 
