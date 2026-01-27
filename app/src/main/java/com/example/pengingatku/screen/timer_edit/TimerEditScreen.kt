@@ -46,8 +46,6 @@ fun TimerEditScreen(
     timerId: Int,
     timerRepository: TimerRepository
 ) {
-
-    Log.d("RECOMPOSE", "TIMER EDIT SCREEN")
     val scope = rememberCoroutineScope()
     val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 

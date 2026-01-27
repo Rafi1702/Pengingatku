@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,12 +33,20 @@ fun TimerListScreen(
 ) {
     val scope = rememberCoroutineScope()
 
+    /*
+    Flag agar LaunchedEffect tidak berjalan lagi setelah pop dari EditTimerScreen
+    * */
+    val isInitialized = rememberSaveable{ mutableStateOf(false) }
 
     val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
 
     LaunchedEffect(Unit){
-        timerRepository.getTimerDatas()
+        if(!isInitialized.value){
+            timerRepository.getTimerDatas()
+            isInitialized.value = true
+        }
+
     }
 
 
