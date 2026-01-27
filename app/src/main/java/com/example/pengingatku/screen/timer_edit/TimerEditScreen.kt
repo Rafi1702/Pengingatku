@@ -1,26 +1,20 @@
 package com.example.pengingatku.screen.timer_edit
 
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,13 +55,13 @@ fun TimerEditScreen(
         )
     }
 
-    val newTimerInformation = remember(timerInformation.id) {
+    val editedTimerInformation = remember(timerInformation.id) {
         mutableStateOf(timerInformation)
     }
 
     val isValueChanged = remember {
         derivedStateOf {
-            newTimerInformation.value != timerInformation
+            editedTimerInformation.value != timerInformation
         }
     }
 
@@ -75,16 +69,24 @@ fun TimerEditScreen(
 
     if (showDialog.value) {
         AlertDialog(
-            onDismissRequest = {
+            onDismissRequest = {},
+            dismissButton = {
+                TextButton(onClick = {
+                    showDialog.value = false
+                }){
+                    Text("Cancel")
+                }
             },
-            title = { Text("Hapus ${newTimerInformation.value.label}?") },
+            title = { Text("Hapus ${editedTimerInformation.value.label}?") },
             confirmButton = {
                 TextButton(onClick = {
                     scope.launch {
-                        timerRepository.deleteTimer(newTimerInformation.value.id)
+                        timerRepository.deleteTimer(editedTimerInformation.value.id)
                     }
                     showDialog.value = false
-                }) { Text("Hapus") }
+
+                    onNavigateToTimerList()
+                }) { Text("Delete Immediately") }
             }
         )
     }
@@ -99,7 +101,7 @@ fun TimerEditScreen(
             ) {
             WeightBox(2f) {
                 HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
-                    newTimerInformation.value.copy(hours = it)
+                    editedTimerInformation.value.copy(hours = it)
                 })
             }
 
@@ -114,7 +116,7 @@ fun TimerEditScreen(
 
             WeightBox(2f) {
                 HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
-                    newTimerInformation.value.copy(minutes = it)
+                    editedTimerInformation.value.copy(minutes = it)
                 })
             }
 
@@ -139,7 +141,7 @@ fun TimerEditScreen(
             BottomEditTimerContainer(
                 timerInformation,
                 onTimerInformationChanged = { timer ->
-                    newTimerInformation.value = timer
+                    editedTimerInformation.value = timer
                 }
             )
 
@@ -154,7 +156,7 @@ fun TimerEditScreen(
             }
             TextButton(modifier = Modifier.weight(1f), enabled = isValueChanged.value, onClick = {
                 scope.launch {
-                    timerRepository.editTimer(newTimerInformation.value)
+                    timerRepository.editTimer(editedTimerInformation.value)
                 }
 
             }) {
