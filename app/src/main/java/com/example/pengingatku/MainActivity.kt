@@ -207,6 +207,7 @@ fun AppNavHost(
         exitTransition = { fadeOut(animationSpec = tween(200)) }
     ) {
         val timerRepository = TimerRepository()
+        val stopWatchRepository = StopwatchRepository()
         // isi dengan NavGraphBuilder atau composable
 
         /* Kode Di Dalam Builder NavHost (lambda yang dibutuhkan dari NavHost)*/
@@ -228,7 +229,11 @@ fun AppNavHost(
                     }
                 )
             }
-            composable(ScreenNavigation.StopWatch.route) { StopWatchScreen() }
+            composable(ScreenNavigation.StopWatch.route) {
+                StopWatchScreen(
+                    stopWatchRepository = stopWatchRepository
+                )
+            }
         }
 
         composable(

@@ -5,8 +5,11 @@ import android.util.Log
 import com.example.pengingatku.utils.StateHelper
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
@@ -18,6 +21,16 @@ class TimerRepository {
     )
 
     val timerFlow = timerData.asStateFlow()
+
+
+
+   val stopWatch = flow{
+        var x = 0
+        while(true){
+            delay(1000)
+            emit(x++)
+        }
+    }
 
     suspend fun deleteTimer(id: Int) {
         val timerState = (timerData.value as? StateHelper.Success)?.data

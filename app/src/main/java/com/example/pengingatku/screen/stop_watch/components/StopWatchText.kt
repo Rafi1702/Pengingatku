@@ -11,10 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.example.pengingatku.R
+import com.example.pengingatku.utils.TimeUnit
+import com.example.pengingatku.utils.timeTextFormat
 
 @Composable
 
-fun StopWatchText() {
+fun StopWatchText(second: Long) {
 
     Row(
         modifier = Modifier
@@ -24,16 +26,16 @@ fun StopWatchText() {
     ) {
         val localTextStyle =
             MaterialTheme.typography.displayLarge.copy(color = MaterialTheme.colorScheme.onSurface)
-        Text("00", style = localTextStyle)
+        Text(TimeUnit.HOUR.timeTextFormat(second), style = localTextStyle)
         Icon(
             painter = painterResource(id = R.drawable.ic_colon_stopwatch),
             null,
             )
-        Text("00", style = localTextStyle)
+        Text(TimeUnit.MINUTE.timeTextFormat(second), style = localTextStyle)
         Icon(
             painter = painterResource(id = R.drawable.ic_colon_stopwatch),
             null,
         )
-        Text("00", style = localTextStyle)
+        Text(TimeUnit.SECOND.timeTextFormat(second), style = localTextStyle)
     }
 }
