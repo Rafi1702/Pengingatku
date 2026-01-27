@@ -3,6 +3,10 @@ package com.example.pengingatku
 import android.os.Build
 import android.util.Log
 import com.example.pengingatku.utils.StateHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
@@ -23,13 +28,11 @@ class TimerRepository {
     val timerFlow = timerData.asStateFlow()
 
 
-
-   val stopWatch = flow{
-        var x = 0
-        while(true){
-            delay(1000)
-            emit(x++)
+    init{
+        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch{
+            getTimerDatas()
         }
+
     }
 
     suspend fun deleteTimer(id: Int) {

@@ -151,7 +151,10 @@ fun Main() {
                                 navController.navigate(screen.route) {
                                     popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
+
                                     }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
                             }
                         )

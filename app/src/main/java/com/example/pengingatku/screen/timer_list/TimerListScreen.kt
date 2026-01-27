@@ -33,24 +33,13 @@ fun TimerListScreen(
 ) {
     val scope = rememberCoroutineScope()
 
-    /*
-    Flag agar LaunchedEffect tidak berjalan lagi setelah pop dari EditTimerScreen
-    * */
-    val isInitialized = rememberSaveable{ mutableStateOf(false) }
 
     val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
 
-    LaunchedEffect(Unit){
-        if(!isInitialized.value){
-            timerRepository.getTimerDatas()
-            isInitialized.value = true
-        }
-
-    }
 
 
-    Box(modifier =  LocalModifier.current.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = LocalModifier.current.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (val state = uiState) {
             is StateHelper.Loading -> {
                 CircularProgressIndicator()
@@ -99,8 +88,6 @@ fun TimerListScreen(
 }
 
 
-
-
 //
 //    val uiState =
 //        remember { mutableStateOf<StateHelper<List<TimerInformation>>>(StateHelper.Loading) }
@@ -114,7 +101,6 @@ fun TimerListScreen(
 ////        })
 //        Log.d("EFFECTS", "LAUNCHED EFFECT IN TIMERLIST")
 //    }
-
 
 
 //    val uiState = remember {
