@@ -20,8 +20,8 @@ enum class Day(val isWeekend: Boolean = false){
 data class TimerInformation(
     val id: Int,
     val label: String,
-    val hours: Int,
-    val minutes: Int,
+    val hours: Long,
+    val minutes: Long,
     val timeAdverb: AdverbOfTime,
     val isChecked: Boolean = false,
     val pickedDays: List<Day>  =emptyList(),
