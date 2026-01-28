@@ -1,4 +1,4 @@
-package com.example.pengingatku
+package com.example.pengingatku.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -61,6 +61,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.pengingatku.data.repository.StopwatchRepository
+import com.example.pengingatku.data.repository.TimerRepository
 
 
 class MainActivity : ComponentActivity() {

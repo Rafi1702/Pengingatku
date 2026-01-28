@@ -1,18 +1,22 @@
 package com.example.pengingatku
+
+import kotlinx.serialization.Serializable
+
 //
 
 
-//@Serializable
+@Serializable
 enum class AdverbOfTime {
     AM, PM
 }
 
+@Serializable
 enum class Day(val isWeekend: Boolean = false){
     SUNDAY(true), MONDAY, TUESDAY, WEDNESDAY, THURSTDAY, FRIDAY, SATURDAY(true)
 }
 
 
-//@Serializable
+@Serializable
 data class TimerInformation(
     val id: Int,
     val label: String,

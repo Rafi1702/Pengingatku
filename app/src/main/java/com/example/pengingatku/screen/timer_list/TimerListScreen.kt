@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pengingatku.LocalModifier
-import com.example.pengingatku.TimerRepository
+import com.example.pengingatku.data.repository.TimerRepository
 import com.example.pengingatku.screen.timer_list.components.TimerCard
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch

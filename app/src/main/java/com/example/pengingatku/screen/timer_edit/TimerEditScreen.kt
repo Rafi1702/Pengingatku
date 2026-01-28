@@ -27,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pengingatku.AdverbOfTime
 import com.example.pengingatku.LocalModifier
 import com.example.pengingatku.TimerInformation
-import com.example.pengingatku.TimerRepository
+import com.example.pengingatku.data.repository.TimerRepository
 import com.example.pengingatku.screen.timer_edit.components.BottomEditTimerContainer
 import com.example.pengingatku.screen.timer_edit.components.HourPicker
 import com.example.pengingatku.screen.timer_edit.components.PickerType

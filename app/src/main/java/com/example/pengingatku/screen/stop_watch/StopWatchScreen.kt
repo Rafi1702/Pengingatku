@@ -17,8 +17,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.pengingatku.StopwatchRepository
-import com.example.pengingatku.TimerRepository
+import com.example.pengingatku.data.repository.StopwatchRepository
+import com.example.pengingatku.data.repository.TimerRepository
 import com.example.pengingatku.screen.stop_watch.components.StopWatchText
 import kotlinx.coroutines.launch
 
