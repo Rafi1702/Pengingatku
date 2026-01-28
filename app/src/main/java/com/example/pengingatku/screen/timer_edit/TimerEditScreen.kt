@@ -73,7 +73,7 @@ fun TimerEditScreen(
             dismissButton = {
                 TextButton(onClick = {
                     showDialog.value = false
-                }){
+                }) {
                     Text("Cancel")
                 }
             },

@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 import com.example.pengingatku.TimerInformation
+import com.example.pengingatku.utils.timeTextFormat
 
 
 @Composable
@@ -35,7 +36,7 @@ fun TimerCard(
     onSelectedTimerInfo: (Int) -> Unit,
     onNavigate: () -> Unit
 ) {
-    val (id, label, hours, _, timeAdverb, isChecked, pickedDays) = timerInformation
+    val (id, label, hours, minutes, timeAdverb, isChecked, pickedDays) = timerInformation
 
     Box(
         modifier = Modifier
@@ -55,23 +56,23 @@ fun TimerCard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
-            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-                Text(label, style = MaterialTheme.typography.titleMedium)
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
-                        "$hours:$hours",
-                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        timeAdverb.name,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
-                Spacer(Modifier.height(8.dp))
-                PickedDaysIndicator(pickedDays)
-                Spacer(Modifier.height(8.dp))
+            Text(label, style = MaterialTheme.typography.titleMedium)
+
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    "$hours:$hours",
+                    style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    timeAdverb.name,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                )
             }
+
+            Spacer(Modifier.height(8.dp))
+            PickedDaysIndicator(pickedDays)
+            Spacer(Modifier.height(8.dp))
 
             Box(
                 modifier = Modifier
