@@ -159,6 +159,8 @@ fun TimerEditScreen(
                     timerRepository.editTimer(editedTimerInformation.value)
                 }
 
+                onNavigateToTimerList()
+
             }) {
                 Text("Save")
             }

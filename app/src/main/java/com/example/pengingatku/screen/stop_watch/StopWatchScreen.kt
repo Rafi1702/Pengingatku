@@ -41,7 +41,7 @@ fun StopWatchScreen(stopWatchRepository: StopwatchRepository) {
             val contentPaddingValues = PaddingValues(horizontal = 48.dp, vertical = 16.dp)
             Button(onClick = {
                 if (!isTimerActive.value) {
-                    stopWatchRepository.startStopWatch()
+                    stopWatchRepository.startStopwatch()
 
                 } else {
                     stopWatchRepository.pause()
@@ -54,8 +54,11 @@ fun StopWatchScreen(stopWatchRepository: StopwatchRepository) {
 
             Button(onClick = {
 
-            }, contentPadding = contentPaddingValues, enabled = false) {
-                Text("Lap")
+                stopWatchRepository.resetStopwatch()
+
+                isTimerActive.value = false
+            }, contentPadding = contentPaddingValues, enabled = !isTimerActive.value && (uiSecondState != 0L)) {
+                Text("Reset")
             }
         }
     }

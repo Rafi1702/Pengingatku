@@ -18,10 +18,7 @@ class StopwatchRepository {
 
     val timeState = timeFlow.asStateFlow()
 
-
-
-
-    fun startStopWatch() {
+    fun startStopwatch() {
         if (job?.isActive == true) return
         job = CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             while (true) {
@@ -32,6 +29,11 @@ class StopwatchRepository {
     }
 
     fun pause() = job?.cancel()
+
+    fun resetStopwatch() {
+        pause()
+        timeFlow.update { 0L }
+    }
 
 
 }
