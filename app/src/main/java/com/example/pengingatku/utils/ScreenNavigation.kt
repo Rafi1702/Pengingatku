@@ -3,6 +3,8 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.example.pengingatku.R
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 //package com.example.pengingatku.utils
 //
@@ -40,7 +42,8 @@ sealed class ScreenNavigation(val route: String, val title: String, val icon: In
     // Other Screens
     object AddTimer : ScreenNavigation("add_timer", "Add Timer")
     object EditTimer : ScreenNavigation("edit_timer/{timerId}", "Edit Timer") {
-        fun createRoute(id: Int) = "edit_timer/$id"
+        @OptIn(ExperimentalUuidApi::class)
+        fun createRoute(id: Uuid) = "edit_timer/$id"
     }
 
     companion object {

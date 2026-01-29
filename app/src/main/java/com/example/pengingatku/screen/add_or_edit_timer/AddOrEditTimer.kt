@@ -36,11 +36,14 @@ import com.example.pengingatku.screen.add_or_edit_timer.components.HourPicker
 import com.example.pengingatku.screen.add_or_edit_timer.components.PickerType
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun TimerEditScreen(
     onNavigateToTimerList: () -> Unit,
-    timerId: Int?,
+    timerId: Uuid?,
     timerRepository: TimerRepository
 ) {
     val scope = rememberCoroutineScope()
@@ -230,9 +233,10 @@ fun RowScope.WeightBox(
     }
 }
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun loadTimerInformation(
-    timerId: Int?,
+    timerId: Uuid?,
     timerRepository: TimerRepository
 ): State<StateHelper<TimerInformation?>> {
     return produceState<StateHelper<TimerInformation?>>(

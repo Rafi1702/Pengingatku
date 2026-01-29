@@ -12,7 +12,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+
+@OptIn(ExperimentalUuidApi::class)
 class TimerRepository {
     private val timerData = MutableStateFlow<StateHelper<List<TimerInformation>>>(
         StateHelper.Loading
@@ -29,7 +33,8 @@ class TimerRepository {
 
     }
 
-    suspend fun deleteTimer(id: Int) {
+
+    suspend fun deleteTimer(id: Uuid) {
         val timerState = (timerData.value as? StateHelper.Success)?.data
 
         timerState?.let { originalTimer ->
@@ -37,6 +42,7 @@ class TimerRepository {
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     suspend fun editTimer(timerInformation: TimerInformation) {
         val timerState = (timerData.value as? StateHelper.Success)?.data
 
@@ -52,7 +58,6 @@ class TimerRepository {
         delay(3000)
         val timerDatas = listOf(
             TimerInformation(
-                id = 1,
                 label = "Work",
                 hours = 12,
                 minutes = 3,
@@ -61,7 +66,6 @@ class TimerRepository {
             ),
 
             TimerInformation(
-                id = 2,
                 label = "Work",
                 hours = 12,
                 minutes = 3,
@@ -69,14 +73,12 @@ class TimerRepository {
             ),
 
             TimerInformation(
-                id = 3,
                 label = "Work",
                 hours = 12,
                 minutes = 3,
                 timeAdverb = AdverbOfTime.AM,
             ),
             TimerInformation(
-                id = 4,
                 label = "Study",
                 hours = 12,
                 minutes = 3,
@@ -87,10 +89,7 @@ class TimerRepository {
 
         try {
             timerData.emit(StateHelper.Success(timerDatas))
-            val timerState = (timerData.value as? StateHelper.Success)?.data
-            timerState?.let {
-                TimerInformation.id = it.last().id
-            }
+
 
 
             Log.d("REPOSITORY", "SUCCESS $timerDatas")
@@ -103,7 +102,7 @@ class TimerRepository {
 
     }
 
-    suspend fun findTimerById(timerId: Int?): TimerInformation? {
+    suspend fun findTimerById(timerId: Uuid?): TimerInformation? {
         if (timerId != null) {
             delay(1500)
             val timerState = (timerData.value as? StateHelper.Success)?.data
@@ -124,13 +123,11 @@ class TimerRepository {
 
     }
 
-    suspend fun selectedTimer(id: Int) = when (val state = timerData.value) {
+    suspend fun selectedTimer(id: Uuid) = when (val state = timerData.value) {
         is StateHelper.Success -> {
             val updatedTimerData =
                 state.data.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
             timerData.emit(StateHelper.Success(updatedTimerData))
-
-
         }
 
         is StateHelper.Failure -> {

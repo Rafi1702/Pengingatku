@@ -22,11 +22,14 @@ import com.example.pengingatku.data.repository.TimerRepository
 import com.example.pengingatku.screen.timer_list.components.TimerCard
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun TimerListScreen(
     timerRepository: TimerRepository = TimerRepository(),
-    onNavigate: (Int) -> Unit
+    onNavigate: (Uuid) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 

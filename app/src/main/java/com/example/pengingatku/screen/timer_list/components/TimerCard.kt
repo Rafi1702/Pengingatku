@@ -25,15 +25,18 @@ import androidx.compose.ui.unit.dp
 import com.example.pengingatku.TimerInformation
 import com.example.pengingatku.components.SwitchToggle
 import com.example.pengingatku.utils.timeTextFormat
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun TimerCard(
     timerInformation: TimerInformation,
-    onSelectedTimerInfo: (Int) -> Unit,
+    onSelectedTimerInfo: (Uuid) -> Unit,
     onNavigate: () -> Unit
 ) {
-    val (id, label, hours, minutes, timeAdverb, isChecked, pickedDays) = timerInformation
+    val (label, hours, minutes, timeAdverb, isChecked, pickedDays) = timerInformation
 
     Box(
         modifier = Modifier
@@ -84,7 +87,7 @@ fun TimerCard(
                 SwitchToggle(
                     isChecked = isChecked,
                     onCheckedChange = { _ ->
-                        onSelectedTimerInfo(id)
+                        onSelectedTimerInfo(timerInformation.id)
                     }
                 )
 

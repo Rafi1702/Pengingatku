@@ -63,6 +63,8 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.pengingatku.data.repository.StopwatchRepository
 import com.example.pengingatku.data.repository.TimerRepository
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 class MainActivity : ComponentActivity() {
@@ -200,6 +202,7 @@ fun Main() {
 }
 
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -255,13 +258,17 @@ fun AppNavHost(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
                 navArgument("timerId") { type = NavType.IntType }
             )) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("timerId") ?: 0
+            val id = backStackEntry.arguments?.getString("timerId")
+
+            val uuid = id?.let { Uuid.parse(it) }
+
+            id
             TimerEditScreen(
                 onNavigateToTimerList = {
                     navController.navigate(ScreenNavigation.TimerList.route)
                 },
                 timerRepository = timerRepository,
-                timerId = id
+                timerId = uuid
 
             )
         }

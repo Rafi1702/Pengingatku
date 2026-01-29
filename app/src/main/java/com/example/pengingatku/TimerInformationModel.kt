@@ -1,6 +1,8 @@
 package com.example.pengingatku
 
 import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 //
 
@@ -16,9 +18,10 @@ enum class Day(val isWeekend: Boolean = false){
 }
 
 
+@OptIn(ExperimentalUuidApi::class)
 @Serializable
 data class TimerInformation(
-    val id: Int,
+
     val label: String,
     val hours: Int,
     val minutes: Int,
@@ -26,23 +29,14 @@ data class TimerInformation(
     val isChecked: Boolean = false,
     val pickedDays: List<Day>  =emptyList(),
 ){
-
-    //for dummy only
-    companion object{
-        var id = 0
-
-        fun incrementId(){
-            id++
-        }
-    }
+    val id: Uuid = Uuid.random()
 }
-
 //fun getDefaultTimerInformation(): TimerInformation{
 //    return
 //}
 
+@OptIn(ExperimentalUuidApi::class)
 fun TimerInformation?.getDefaultTimerInformation() = this?: TimerInformation(
-    id = TimerInformation.id,
     label = "Not Available",
     hours = 0,
     minutes = 0,
