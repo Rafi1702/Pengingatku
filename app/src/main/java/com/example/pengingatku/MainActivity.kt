@@ -225,13 +225,12 @@ fun AppNavHost(
         ) {
 
             composable(ScreenNavigation.TimerList.route) {
-
                 TimerListScreen(
                     timerRepository = timerRepository,
                     onNavigate = { timerId ->
                         navController.navigate(
                             ScreenNavigation.EditTimer.createRoute(
-                                timerId
+                                timerId.toString()
                             )
                         )
                     }
@@ -256,9 +255,9 @@ fun AppNavHost(
 
         composable(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
-                navArgument("timerId") { type = NavType.IntType }
+                navArgument("uuidString") { type = NavType.StringType }
             )) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("timerId")
+            val id = backStackEntry.arguments?.getString("uuidString")
 
             val uuid = id?.let { Uuid.parse(it) }
 

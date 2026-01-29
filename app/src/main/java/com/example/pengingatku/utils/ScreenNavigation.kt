@@ -41,9 +41,8 @@ sealed class ScreenNavigation(val route: String, val title: String, val icon: In
 
     // Other Screens
     object AddTimer : ScreenNavigation("add_timer", "Add Timer")
-    object EditTimer : ScreenNavigation("edit_timer/{timerId}", "Edit Timer") {
-        @OptIn(ExperimentalUuidApi::class)
-        fun createRoute(id: Uuid) = "edit_timer/$id"
+    object EditTimer : ScreenNavigation("edit_timer/{uuidString}", "Edit Timer") {
+        fun createRoute(uuidString: String) = "edit_timer/$uuidString"
     }
 
     companion object {
