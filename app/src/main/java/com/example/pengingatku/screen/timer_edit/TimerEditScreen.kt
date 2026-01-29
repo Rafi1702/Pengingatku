@@ -1,33 +1,36 @@
 package com.example.pengingatku.screen.timer_edit
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.pengingatku.AdverbOfTime
 import com.example.pengingatku.LocalModifier
 import com.example.pengingatku.TimerInformation
 import com.example.pengingatku.data.repository.TimerRepository
+import com.example.pengingatku.getDefaultTimerInformation
 import com.example.pengingatku.screen.timer_edit.components.BottomEditTimerContainer
 import com.example.pengingatku.screen.timer_edit.components.HourPicker
 import com.example.pengingatku.screen.timer_edit.components.PickerType
@@ -37,138 +40,154 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimerEditScreen(
     onNavigateToTimerList: () -> Unit,
-    timerId: Int,
+    timerId: Int?,
     timerRepository: TimerRepository
 ) {
     val scope = rememberCoroutineScope()
-    val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
 
-    val timerInformation = remember(uiState) {
-        val initialData = (uiState as? StateHelper.Success)?.data?.find { it.id == timerId }
-        initialData ?: TimerInformation(
-            id = timerId,
-            label = "Not Available",
-            hours = 0,
-            minutes = 0,
-            timeAdverb = AdverbOfTime.AM,
-            pickedDays = emptyList()
-        )
-    }
 
-    val editedTimerInformation = remember(timerInformation.id) {
-        mutableStateOf(timerInformation)
-    }
+    val timerInformationState = loadTimerInformation(timerId, timerRepository)
 
-    val isValueChanged = remember {
-        derivedStateOf {
-            editedTimerInformation.value != timerInformation
-        }
-    }
 
     val showDialog = remember { mutableStateOf(false) }
 
     if (showDialog.value) {
-        AlertDialog(
-            onDismissRequest = {},
-            dismissButton = {
-                TextButton(onClick = {
-                    showDialog.value = false
-                }) {
-                    Text("Cancel")
-                }
-            },
-            title = { Text("Hapus ${editedTimerInformation.value.label}?") },
-            confirmButton = {
-                TextButton(onClick = {
-                    scope.launch {
-                        timerRepository.deleteTimer(editedTimerInformation.value.id)
+        val timerInformationSuccess = (timerInformationState.value as? StateHelper.Success)?.data
+
+        timerInformationSuccess?.let{
+            AlertDialog(
+                onDismissRequest = {},
+                dismissButton = {
+                    TextButton(onClick = {
+                        showDialog.value = false
+                    }) {
+                        Text("Cancel")
                     }
-                    showDialog.value = false
+                },
+                title = { Text("Hapus ${timerInformationSuccess.label}?") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        scope.launch {
+                            timerRepository.deleteTimer(timerInformationSuccess.id)
+                        }
+                        showDialog.value = false
 
-                    onNavigateToTimerList()
-                }) { Text("Delete Immediately") }
-            }
-        )
-    }
-
-    Column(LocalModifier.current) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(.5F),
-            verticalAlignment = Alignment.CenterVertically,
-
-            ) {
-            WeightBox(2f) {
-                HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
-                    editedTimerInformation.value.copy(hours = it)
-                })
-            }
-
-            WeightBox(.5f) {
-                Box(
-                    modifier = Modifier
-                        .size(8.dp)
-                        .background(MaterialTheme.colorScheme.onSurface, CircleShape)
-                )
-            }
-
-
-            WeightBox(2f) {
-                HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
-                    editedTimerInformation.value.copy(minutes = it)
-                })
-            }
-
-
-        }
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .background(
-                    MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(
-                        topStart = 16.dp,
-                        topEnd = 16.dp,
-                    ),
-                ),
-
-            ) {
-
-
-            BottomEditTimerContainer(
-                timerInformation,
-                onTimerInformationChanged = { timer ->
-                    editedTimerInformation.value = timer
+                        onNavigateToTimerList()
+                    }) { Text("Delete Immediately") }
                 }
             )
-
-
         }
-
-        Row(modifier = Modifier.fillMaxWidth()) {
-            TextButton(modifier = Modifier.weight(1f), onClick = {
-                showDialog.value = true
-            }) {
-                Text("Delete")
-            }
-            TextButton(modifier = Modifier.weight(1f), enabled = isValueChanged.value, onClick = {
-                scope.launch {
-                    timerRepository.editTimer(editedTimerInformation.value)
-                }
-
-                onNavigateToTimerList()
-
-            }) {
-                Text("Save")
-            }
-
-        }
-
 
     }
+
+    when(val state = timerInformationState.value) {
+        is StateHelper.Success -> {
+            val editedTimerInformation = remember {
+                Log.d("TIMER_EDIT", "DOING MUTATION ON Edited Timer Information")
+
+
+                mutableStateOf(state.data?: getDefaultTimerInformation())
+            }
+
+            val isValueChanged = remember {
+                derivedStateOf {
+                    editedTimerInformation.value != state.data
+                }
+            }
+
+            Column(LocalModifier.current) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(.5F),
+                    verticalAlignment = Alignment.CenterVertically,
+
+                    ) {
+                    WeightBox(2f) {
+                        HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
+                            editedTimerInformation.value.copy(hours = it)
+                        })
+                    }
+
+                    WeightBox(.5f) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .background(MaterialTheme.colorScheme.onSurface, CircleShape)
+                        )
+                    }
+
+
+                    WeightBox(2f) {
+                        HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
+                            editedTimerInformation.value.copy(minutes = it)
+                        })
+                    }
+
+
+                }
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(
+                            MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(
+                                topStart = 16.dp,
+                                topEnd = 16.dp,
+                            ),
+                        ),
+
+                    ) {
+
+
+                    BottomEditTimerContainer(
+                        editedTimerInformation.value,
+                        onTimerInformationChanged = { timer ->
+                            editedTimerInformation.value = timer
+                        }
+                    )
+
+
+                }
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    TextButton(modifier = Modifier.weight(1f), onClick = {
+                        showDialog.value = true
+                    }) {
+                        Text("Delete")
+                    }
+                    TextButton(modifier = Modifier.weight(1f), enabled = isValueChanged.value, onClick = {
+                        scope.launch {
+                            timerRepository.editTimer(editedTimerInformation.value)
+                        }
+
+                        onNavigateToTimerList()
+
+                    }) {
+                        Text("Save")
+                    }
+
+                }
+
+
+            }
+        }
+
+        is StateHelper.Failure -> {
+
+        }
+        StateHelper.Loading -> {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                CircularProgressIndicator()
+            }
+
+        }
+    }
+
+
+
 //    val hour = remember { mutableStateOf(0) }
 //    val minute = remember { mutableStateOf(0) }
 //    val timerTitle = remember {
@@ -201,5 +220,26 @@ fun RowScope.WeightBox(
         contentAlignment = Alignment.Center
     ) {
         content()
+    }
+}
+
+@Composable
+fun loadTimerInformation(
+    timerId: Int?,
+    timerRepository: TimerRepository
+): State<StateHelper<TimerInformation?>> {
+    return produceState<StateHelper<TimerInformation?>>(
+        initialValue = StateHelper.Loading,
+        key1 = timerId,
+        key2 = timerRepository
+    ) {
+        val state = try {
+            val data = timerRepository.findTimerById(timerId)
+            StateHelper.Success(data)
+        } catch (e: Exception) {
+            StateHelper.Failure(e)
+        }
+
+        value = state
     }
 }

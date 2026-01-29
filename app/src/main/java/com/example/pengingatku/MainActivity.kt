@@ -241,6 +241,16 @@ fun AppNavHost(
             }
         }
 
+        composable(route = ScreenNavigation.AddTimer.route){
+            TimerEditScreen(
+                timerId = null,
+                timerRepository = timerRepository,
+                onNavigateToTimerList = {
+                    navController.navigate(ScreenNavigation.TimerList.route)
+                }
+            )
+        }
+
         composable(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
                 navArgument("timerId") { type = NavType.IntType }

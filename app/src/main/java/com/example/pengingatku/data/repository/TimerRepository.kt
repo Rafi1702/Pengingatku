@@ -22,7 +22,7 @@ class TimerRepository {
     val timerFlow = timerData.asStateFlow()
 
 
-    init{
+    init {
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             getTimerDatas()
         }
@@ -32,21 +32,20 @@ class TimerRepository {
     suspend fun deleteTimer(id: Int) {
         val timerState = (timerData.value as? StateHelper.Success)?.data
 
-        timerState?.let{ originalTimer ->
+        timerState?.let { originalTimer ->
             timerData.emit(StateHelper.Success(originalTimer.filter { it.id != id }))
         }
     }
 
-    suspend fun editTimer(timerInformation: TimerInformation){
+    suspend fun editTimer(timerInformation: TimerInformation) {
         val timerState = (timerData.value as? StateHelper.Success)?.data
 
-        timerState?.let{ originalTimer ->
-            timerData.emit(StateHelper.Success(originalTimer.map{
-                if(it.id == timerInformation.id) timerInformation else it
+        timerState?.let { originalTimer ->
+            timerData.emit(StateHelper.Success(originalTimer.map {
+                if (it.id == timerInformation.id) timerInformation else it
             }))
         }
     }
-
 
 
     suspend fun getTimerDatas() {
@@ -88,6 +87,11 @@ class TimerRepository {
 
         try {
             timerData.emit(StateHelper.Success(timerDatas))
+            val timerState = (timerData.value as? StateHelper.Success)?.data
+            timerState?.let{
+                TimerInformation.id = it.last().id
+            }
+
 
             Log.d("REPOSITORY", "SUCCESS $timerDatas")
 
@@ -99,18 +103,35 @@ class TimerRepository {
 
     }
 
-    suspend fun selectedTimer(id: Int) {
-        when(val state = timerData.value){
-            is StateHelper.Success ->{
-                val updatedTimerData = state.data.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
-                timerData.emit(StateHelper.Success(updatedTimerData))
-            }
+    suspend fun findTimerById(timerId: Int?): TimerInformation? {
+        if (timerId != null) {
+            delay(1500)
+            val timerState = (timerData.value as? StateHelper.Success)?.data
 
-            is StateHelper.Failure -> {
-                val err = state.exception
-                timerData.emit(StateHelper.Failure(err))
-            }
-            else ->{}
+            Log.d("TIMER_REPOSITORY", "FIND TIMER BY ID ${timerState?.find{it.id == timerId}}")
+           return timerState?.find{it.id == timerId}
         }
+
+        return null
+
+
     }
+
+    suspend fun selectedTimer(id: Int) = when (val state = timerData.value) {
+        is StateHelper.Success -> {
+            val updatedTimerData =
+                state.data.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
+            timerData.emit(StateHelper.Success(updatedTimerData))
+
+
+        }
+
+        is StateHelper.Failure -> {
+            val err = state.exception
+            timerData.emit(StateHelper.Failure(err))
+        }
+
+        else -> {}
+    }
+
 }

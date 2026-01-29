@@ -26,4 +26,25 @@ data class TimerInformation(
     val isChecked: Boolean = false,
     val pickedDays: List<Day>  =emptyList(),
     val timeAdded: Long = System.currentTimeMillis()
-)
+){
+
+    //for dummy only
+    companion object{
+        var id = 0
+
+        fun incrementId(){
+            id++
+        }
+    }
+}
+
+fun getDefaultTimerInformation(): TimerInformation{
+    return TimerInformation(
+        id = TimerInformation.id,
+        label = "Not Available",
+        hours = 0,
+        minutes = 0,
+        timeAdverb = AdverbOfTime.AM,
+        pickedDays = emptyList()
+    )
+}
