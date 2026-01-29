@@ -28,9 +28,8 @@ data class TimerInformation(
     val timeAdverb: AdverbOfTime,
     val isChecked: Boolean = false,
     val pickedDays: List<Day>  =emptyList(),
-){
     val id: Uuid = Uuid.random()
-}
+)
 //fun getDefaultTimerInformation(): TimerInformation{
 //    return
 //}

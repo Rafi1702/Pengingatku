@@ -86,9 +86,6 @@ fun TimerEditScreen(
         is StateHelper.Success -> {
             Log.d("TIMER_EDIT","${state.data}" )
             val editedTimerInformation = remember {
-//                Log.d("TIMER_EDIT", "DOING MUTATION ON Edited Timer Information")
-
-
                 mutableStateOf(state.data.getDefaultTimerInformation())
             }
 
@@ -108,7 +105,7 @@ fun TimerEditScreen(
                     ) {
                     WeightBox(2f) {
                         HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
-                            editedTimerInformation.value.copy(hours = it)
+                            editedTimerInformation.value = editedTimerInformation.value.copy(hours = it)
                         })
                     }
 
@@ -123,7 +120,7 @@ fun TimerEditScreen(
 
                     WeightBox(2f) {
                         HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
-                            editedTimerInformation.value.copy(minutes = it)
+                            editedTimerInformation.value = editedTimerInformation.value.copy(minutes = it)
                         })
                     }
 
@@ -167,7 +164,7 @@ fun TimerEditScreen(
                         onClick = {
                             scope.launch {
                                 if (timerId != null) {
-                                    timerRepository.editTimer(editedTimerInformation.value)
+                                    timerRepository.editTimer(editedTimerInformation.value.copy())
                                 } else {
                                     timerRepository.addTimer(editedTimerInformation.value)
                                 }
