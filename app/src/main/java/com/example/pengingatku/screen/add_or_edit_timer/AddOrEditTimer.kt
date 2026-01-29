@@ -51,7 +51,6 @@ fun TimerEditScreen(
 
     val timerInformationState = loadTimerInformation(timerId, timerRepository)
 
-
     val showDialog = remember { mutableStateOf(false) }
 
     if (showDialog.value) {

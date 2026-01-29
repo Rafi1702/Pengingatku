@@ -103,15 +103,9 @@ class TimerRepository {
     }
 
     suspend fun findTimerById(timerId: Uuid?): TimerInformation? {
-        if (timerId != null) {
-            delay(1500)
-            val timerState = (timerData.value as? StateHelper.Success)?.data
-
-            Log.d("TIMER_REPOSITORY", "FIND TIMER BY ID ${timerState?.find { it.id == timerId }}")
-            return timerState?.find { it.id == timerId }
-        }
-
-        return null
+        delay(1500)
+        val timerState = (timerData.value as? StateHelper.Success)?.data
+        return timerState?.find { it.id == timerId }
     }
 
     suspend fun addTimer(newTimerInformation: TimerInformation) {

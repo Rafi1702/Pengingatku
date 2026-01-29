@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -25,6 +27,10 @@ fun StopWatchScreen(stopWatchRepository: StopwatchRepository) {
     val uiSecondState by stopWatchRepository.timeState.collectAsStateWithLifecycle()
 
     val isTimerActive = rememberSaveable { mutableStateOf(false) }
+
+    val isPaused = remember{
+        derivedStateOf { !isTimerActive.value && (uiSecondState != 0L) }
+    }
 
     Column(
         modifier = Modifier
@@ -55,7 +61,7 @@ fun StopWatchScreen(stopWatchRepository: StopwatchRepository) {
                 stopWatchRepository.resetStopwatch()
 
                 isTimerActive.value = false
-            }, contentPadding = contentPaddingValues, enabled = !isTimerActive.value && (uiSecondState != 0L)) {
+            }, contentPadding = contentPaddingValues, enabled = isPaused.value) {
                 Text("Reset")
             }
         }
