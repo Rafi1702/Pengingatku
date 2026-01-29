@@ -1,13 +1,13 @@
 package com.example.pengingatku.utils
 
-import kotlinx.serialization.StringFormat
+import androidx.compose.ui.text.intl.Locale
 
 
 enum class TimeUnit {
     HOUR, MINUTE, SECOND
 }
 
-fun Long.timeTextFormat() = String.format("%02d", this)
+fun Int.timeTextFormat() = String.format("%02d", this)
 
 fun TimeUnit.timeUnitTextFormat(second: Long): String {
     val formattedTime = when (this) {
@@ -15,7 +15,7 @@ fun TimeUnit.timeUnitTextFormat(second: Long): String {
         TimeUnit.MINUTE -> second / 60 % 60
         TimeUnit.SECOND -> second % 60
     }
-    return formattedTime.timeTextFormat()
+    return formattedTime.toInt().timeTextFormat()
 }
 
 

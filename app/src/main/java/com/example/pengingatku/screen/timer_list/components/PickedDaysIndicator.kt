@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,15 +21,15 @@ import com.example.pengingatku.Day
 fun PickedDaysIndicator(daysPicked: List<Day>) {
     val boxSize = 4.dp
 
-    if(daysPicked.containsAll(Day.entries)){
+    if (daysPicked.containsAll(Day.entries)) {
         Text("Every Day")
-    }else{
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    } else {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Day.entries.map {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     if (it in daysPicked) Box(
                         modifier = Modifier
-                            .size(boxSize) // Equal width and height
+                            .size(boxSize)
                             .background(
                                 color = MaterialTheme.colorScheme.primary,
                                 shape = RoundedCornerShape(50)

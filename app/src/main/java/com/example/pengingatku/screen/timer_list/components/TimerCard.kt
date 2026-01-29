@@ -10,23 +10,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
 import com.example.pengingatku.TimerInformation
+import com.example.pengingatku.components.SwitchToggle
 import com.example.pengingatku.utils.timeTextFormat
 
 
@@ -47,26 +44,30 @@ fun TimerCard(
             .clickable(onClick = { onNavigate() })
             .padding(
                 start = 32.dp,
-                16.dp, 16.dp, 16.dp
+                end = 16.dp,
+                bottom = 16.dp,
+                top = 16.dp
+
             )
 
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+
+            ) {
 
             Text(label, style = MaterialTheme.typography.titleMedium)
 
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    "$hours:$hours",
+                    "${hours.timeTextFormat()}:${minutes.timeTextFormat()}",
                     style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     timeAdverb.name,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                 )
             }
 
@@ -80,15 +81,11 @@ fun TimerCard(
                 contentAlignment = Alignment.CenterEnd
             ) {
 
-                Switch(
-                    checked = isChecked,// Current state
+                SwitchToggle(
+                    isChecked = isChecked,
                     onCheckedChange = { _ ->
                         onSelectedTimerInfo(id)
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    ),
+                    }
                 )
 
 
