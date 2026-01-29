@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_edit.components
+package com.example.pengingatku.screen.add_or_edit_timer.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize

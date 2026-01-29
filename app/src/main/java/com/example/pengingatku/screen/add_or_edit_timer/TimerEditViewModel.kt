@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_edit
+package com.example.pengingatku.screen.add_or_edit_timer
 
 import androidx.lifecycle.ViewModel
 

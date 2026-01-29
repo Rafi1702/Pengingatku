@@ -25,7 +25,6 @@ data class TimerInformation(
     val timeAdverb: AdverbOfTime,
     val isChecked: Boolean = false,
     val pickedDays: List<Day>  =emptyList(),
-    val timeAdded: Long = System.currentTimeMillis()
 ){
 
     //for dummy only
@@ -38,13 +37,15 @@ data class TimerInformation(
     }
 }
 
-fun getDefaultTimerInformation(): TimerInformation{
-    return TimerInformation(
-        id = TimerInformation.id,
-        label = "Not Available",
-        hours = 0,
-        minutes = 0,
-        timeAdverb = AdverbOfTime.AM,
-        pickedDays = emptyList()
-    )
-}
+//fun getDefaultTimerInformation(): TimerInformation{
+//    return
+//}
+
+fun TimerInformation?.getDefaultTimerInformation() = this?: TimerInformation(
+    id = TimerInformation.id,
+    label = "Not Available",
+    hours = 0,
+    minutes = 0,
+    timeAdverb = AdverbOfTime.AM,
+    pickedDays = emptyList()
+)

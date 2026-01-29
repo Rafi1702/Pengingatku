@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_edit
+package com.example.pengingatku.screen.add_or_edit_timer
 
 
 import android.util.Log
@@ -31,9 +31,9 @@ import com.example.pengingatku.LocalModifier
 import com.example.pengingatku.TimerInformation
 import com.example.pengingatku.data.repository.TimerRepository
 import com.example.pengingatku.getDefaultTimerInformation
-import com.example.pengingatku.screen.timer_edit.components.BottomEditTimerContainer
-import com.example.pengingatku.screen.timer_edit.components.HourPicker
-import com.example.pengingatku.screen.timer_edit.components.PickerType
+import com.example.pengingatku.screen.add_or_edit_timer.components.BottomEditTimerContainer
+import com.example.pengingatku.screen.add_or_edit_timer.components.HourPicker
+import com.example.pengingatku.screen.add_or_edit_timer.components.PickerType
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
 
@@ -52,9 +52,8 @@ fun TimerEditScreen(
     val showDialog = remember { mutableStateOf(false) }
 
     if (showDialog.value) {
-        val timerInformationSuccess = (timerInformationState.value as? StateHelper.Success)?.data
-
-        timerInformationSuccess?.let{
+        val originalTimerInformation = (timerInformationState.value as? StateHelper.Success)?.data
+        originalTimerInformation?.let {
             AlertDialog(
                 onDismissRequest = {},
                 dismissButton = {
@@ -64,11 +63,11 @@ fun TimerEditScreen(
                         Text("Cancel")
                     }
                 },
-                title = { Text("Hapus ${timerInformationSuccess.label}?") },
+                title = { Text("Hapus ${originalTimerInformation.label}?") },
                 confirmButton = {
                     TextButton(onClick = {
                         scope.launch {
-                            timerRepository.deleteTimer(timerInformationSuccess.id)
+                            timerRepository.deleteTimer(originalTimerInformation.id)
                         }
                         showDialog.value = false
 
@@ -80,18 +79,19 @@ fun TimerEditScreen(
 
     }
 
-    when(val state = timerInformationState.value) {
+    when (val state = timerInformationState.value) {
         is StateHelper.Success -> {
+            Log.d("TIMER_EDIT","${state.data}" )
             val editedTimerInformation = remember {
-                Log.d("TIMER_EDIT", "DOING MUTATION ON Edited Timer Information")
+//                Log.d("TIMER_EDIT", "DOING MUTATION ON Edited Timer Information")
 
 
-                mutableStateOf(state.data?: getDefaultTimerInformation())
+                mutableStateOf(state.data.getDefaultTimerInformation())
             }
 
-            val isValueChanged = remember {
+            val isValueChanged = remember{
                 derivedStateOf {
-                    editedTimerInformation.value != state.data
+                    editedTimerInformation.value != state.data.getDefaultTimerInformation()
                 }
             }
 
@@ -158,14 +158,21 @@ fun TimerEditScreen(
                     }) {
                         Text("Delete")
                     }
-                    TextButton(modifier = Modifier.weight(1f), enabled = isValueChanged.value, onClick = {
-                        scope.launch {
-                            timerRepository.editTimer(editedTimerInformation.value)
-                        }
+                    TextButton(
+                        modifier = Modifier.weight(1f),
+                        enabled = isValueChanged.value ,
+                        onClick = {
+                            scope.launch {
+                                if (timerId != null) {
+                                    timerRepository.editTimer(editedTimerInformation.value)
+                                } else {
+                                    timerRepository.addTimer(editedTimerInformation.value)
+                                }
+                            }
 
-                        onNavigateToTimerList()
+                            onNavigateToTimerList()
 
-                    }) {
+                        }) {
                         Text("Save")
                     }
 
@@ -178,14 +185,14 @@ fun TimerEditScreen(
         is StateHelper.Failure -> {
 
         }
+
         StateHelper.Loading -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
 
         }
     }
-
 
 
 //    val hour = remember { mutableStateOf(0) }

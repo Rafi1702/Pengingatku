@@ -52,7 +52,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.pengingatku.screen.stop_watch.StopWatchScreen
-import com.example.pengingatku.screen.timer_edit.TimerEditScreen
+import com.example.pengingatku.screen.add_or_edit_timer.TimerEditScreen
 import com.example.pengingatku.screen.timer_list.TimerListScreen
 import com.example.pengingatku.ui.theme.PengingatkuTheme
 

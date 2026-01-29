@@ -88,7 +88,7 @@ class TimerRepository {
         try {
             timerData.emit(StateHelper.Success(timerDatas))
             val timerState = (timerData.value as? StateHelper.Success)?.data
-            timerState?.let{
+            timerState?.let {
                 TimerInformation.id = it.last().id
             }
 
@@ -108,12 +108,19 @@ class TimerRepository {
             delay(1500)
             val timerState = (timerData.value as? StateHelper.Success)?.data
 
-            Log.d("TIMER_REPOSITORY", "FIND TIMER BY ID ${timerState?.find{it.id == timerId}}")
-           return timerState?.find{it.id == timerId}
+            Log.d("TIMER_REPOSITORY", "FIND TIMER BY ID ${timerState?.find { it.id == timerId }}")
+            return timerState?.find { it.id == timerId }
         }
 
         return null
+    }
 
+    suspend fun addTimer(newTimerInformation: TimerInformation) {
+        val timerState = (timerData.value as? StateHelper.Success)?.data
+
+        timerState?.let {
+            timerData.emit(StateHelper.Success(it + newTimerInformation))
+        }
 
     }
 
