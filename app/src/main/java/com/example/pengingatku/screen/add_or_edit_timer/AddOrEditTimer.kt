@@ -84,14 +84,15 @@ fun TimerEditScreen(
 
     when (val state = timerInformationState.value) {
         is StateHelper.Success -> {
-            Log.d("TIMER_EDIT","${state.data}" )
+            Log.d("TIMER_EDIT", "${state.data}")
             val editedTimerInformation = remember {
                 mutableStateOf(state.data.getDefaultTimerInformation())
             }
 
-            val isValueChanged = remember{
+            val isValueChanged = remember {
                 derivedStateOf {
                     editedTimerInformation.value != state.data.getDefaultTimerInformation()
+                        .copy(id = editedTimerInformation.value.id)
                 }
             }
 
@@ -105,7 +106,8 @@ fun TimerEditScreen(
                     ) {
                     WeightBox(2f) {
                         HourPicker(pickerType = PickerType.Hour, onChangeHourValue = {
-                            editedTimerInformation.value = editedTimerInformation.value.copy(hours = it)
+                            editedTimerInformation.value =
+                                editedTimerInformation.value.copy(hours = it)
                         })
                     }
 
@@ -120,7 +122,8 @@ fun TimerEditScreen(
 
                     WeightBox(2f) {
                         HourPicker(pickerType = PickerType.Minute, onChangeHourValue = {
-                            editedTimerInformation.value = editedTimerInformation.value.copy(minutes = it)
+                            editedTimerInformation.value =
+                                editedTimerInformation.value.copy(minutes = it)
                         })
                     }
 
@@ -160,7 +163,7 @@ fun TimerEditScreen(
                     }
                     TextButton(
                         modifier = Modifier.weight(1f),
-                        enabled = isValueChanged.value ,
+                        enabled = isValueChanged.value,
                         onClick = {
                             scope.launch {
                                 if (timerId != null) {
