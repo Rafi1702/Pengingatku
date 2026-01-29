@@ -117,19 +117,13 @@ class TimerRepository {
 
     }
 
-    suspend fun selectedTimer(id: Uuid) = when (val state = timerData.value) {
-        is StateHelper.Success -> {
-            val updatedTimerData =
-                state.data.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
-            timerData.emit(StateHelper.Success(updatedTimerData))
-        }
+    suspend fun selectedTimer(id: Uuid) {
+        val timerState = (timerData.value as? StateHelper.Success)?.data
+        val updatedTimerData =
+            timerState?.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
 
-        is StateHelper.Failure -> {
-            val err = state.exception
-            timerData.emit(StateHelper.Failure(err))
+        updatedTimerData?.let {
+            timerData.emit(StateHelper.Success(it))
         }
-
-        else -> {}
     }
-
 }
