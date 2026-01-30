@@ -2,6 +2,7 @@ package com.example.pengingatku.data.datasource.mappers
 
 import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.data.datasource.local.entities.AlarmEntity
+import com.example.pengingatku.utils.timeTextFormat
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -24,8 +25,19 @@ fun AlarmEntity.fromAlarmEntity(): AlarmInformation {
         )
 }
 
-fun AlarmInformation.toAlarmEntity(){}
+@OptIn(ExperimentalUuidApi::class)
+fun AlarmInformation.toAlarmEntity(): AlarmEntity {
+    val time = "${this.hours.timeTextFormat()}:${this.minutes.timeTextFormat()}"
+    return AlarmEntity(
+        id = this.id.toString(),
+        name = this.label,
+        time = time,
+        isChecked = this.isChecked,
+        pickedDays = this.pickedDays,
+    )
 
-fun List<AlarmEntity>.fromAlarmEntityList(): List<AlarmInformation>{
-    return this.map{it.fromAlarmEntity()}
+}
+
+fun List<AlarmEntity>.fromAlarmEntityList(): List<AlarmInformation> {
+    return this.map { it.fromAlarmEntity() }
 }

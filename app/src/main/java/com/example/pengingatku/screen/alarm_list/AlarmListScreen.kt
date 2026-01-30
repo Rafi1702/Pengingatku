@@ -35,8 +35,7 @@ fun AlarmListScreen(
     val scope = rememberCoroutineScope()
 
 
-    val uiState by alarmRepository.timerFlow.collectAsStateWithLifecycle()
-
+    val uiState by alarmRepository.getTimerDatas.collectAsStateWithLifecycle()
 
     Box(modifier = LocalModifier.current.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (val state = uiState) {
@@ -62,7 +61,7 @@ fun AlarmListScreen(
                                 onNavigate = { onNavigate(data.id) },
                                 onSelectedTimerInfo = { id ->
                                     scope.launch {
-                                        alarmRepository.selectedTimer(id)
+//                                        alarmRepository.selectedTimer(id)
                                     }
                                 }
                             )

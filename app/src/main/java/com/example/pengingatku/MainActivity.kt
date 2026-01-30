@@ -60,6 +60,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.pengingatku.data.datasource.local.AppDatabase
@@ -211,7 +213,8 @@ fun AppNavHost(
 
     ) {
     val appContext = LocalContext.current.applicationContext
-    val alarmRepository = remember { AlarmRepository(context = appContext) }
+    val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
+    val alarmRepository =AlarmRepository(context = appContext, lifecycleScope)
     val stopWatchRepository = StopwatchRepository()
     NavHost(
         navController,

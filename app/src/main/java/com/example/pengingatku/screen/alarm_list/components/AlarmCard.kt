@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.components.SwitchToggle
@@ -58,7 +59,12 @@ fun TimerCard(
 
             ) {
 
-            Text(label, style = MaterialTheme.typography.titleMedium)
+            Text(
+                label,
+                style = MaterialTheme.typography.titleMedium,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
 
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(

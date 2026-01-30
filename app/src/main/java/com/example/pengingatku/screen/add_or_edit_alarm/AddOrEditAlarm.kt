@@ -70,7 +70,7 @@ fun AlarmEditScreen(
                 confirmButton = {
                     TextButton(onClick = {
                         scope.launch {
-                            timerRepository.deleteTimer(originalTimerInformation.id)
+//                            timerRepository.deleteTimer(originalTimerInformation.id)
                         }
                         showDialog.value = false
 
@@ -167,7 +167,7 @@ fun AlarmEditScreen(
                         onClick = {
                             scope.launch {
                                 if (timerId != null) {
-                                    timerRepository.editTimer(editedTimerInformation.value.copy())
+                                    timerRepository.updateAlarm(editedTimerInformation.value)
                                 } else {
                                     timerRepository.addTimer(editedTimerInformation.value)
                                 }
@@ -196,27 +196,6 @@ fun AlarmEditScreen(
 
         }
     }
-
-
-//    val hour = remember { mutableStateOf(0) }
-//    val minute = remember { mutableStateOf(0) }
-//    val timerTitle = remember {
-//        mutableStateOf("")
-//    }
-//    LaunchedEffect(Unit){
-//
-//       val data = when(val state = uiState){
-//            is StateHelper.Success ->  state.data.find{it.id == timerId}
-//          else -> null
-//        }
-//
-//
-//        hour.value = data?.hours ?: 0
-//        minute.value = data?.minutes ?: 0
-//        timerTitle.value = data?.label ?: "Not Available"
-//    }
-
-
 }
 
 
@@ -246,7 +225,7 @@ fun loadTimerInformation(
     ) {
         val state = try {
             if(timerId!=null){
-                val data = alarmRepository.findTimerById(timerId)
+                val data = alarmRepository.findAlarmById(timerId)
                 StateHelper.Success(data)
             }else {
                 StateHelper.Success(null.getDefaultAlarmInformation())
