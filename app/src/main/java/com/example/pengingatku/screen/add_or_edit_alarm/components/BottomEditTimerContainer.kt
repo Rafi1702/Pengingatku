@@ -28,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.pengingatku.Day
+import com.example.pengingatku.utils.Day
 import com.example.pengingatku.TimerInformation
 import java.util.Locale.getDefault
 import kotlin.uuid.ExperimentalUuidApi

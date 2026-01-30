@@ -7,7 +7,7 @@ enum class TimeUnit {
     HOUR, MINUTE, SECOND
 }
 
-fun Int.timeTextFormat() = String.format("%02d", this)
+fun Int.timeTextFormat() = this.toString().padStart(2, '0')
 
 fun TimeUnit.timeUnitTextFormat(second: Long): String {
     val formattedTime = when (this) {

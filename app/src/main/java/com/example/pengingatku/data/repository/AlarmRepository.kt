@@ -2,7 +2,7 @@ package com.example.pengingatku.data.repository
 
 import android.util.Log
 import com.example.pengingatku.AdverbOfTime
-import com.example.pengingatku.Day
+import com.example.pengingatku.utils.Day
 import com.example.pengingatku.TimerInformation
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +61,6 @@ class AlarmRepository {
                 label = "Work",
                 hours = 12,
                 minutes = 3,
-                timeAdverb = AdverbOfTime.AM,
                 pickedDays = listOf(Day.SUNDAY, Day.MONDAY)
             ),
 
@@ -69,20 +68,17 @@ class AlarmRepository {
                 label = "Work",
                 hours = 12,
                 minutes = 3,
-                timeAdverb = AdverbOfTime.AM,
             ),
 
             TimerInformation(
                 label = "Work",
                 hours = 12,
                 minutes = 3,
-                timeAdverb = AdverbOfTime.AM,
             ),
             TimerInformation(
                 label = "Study",
                 hours = 12,
                 minutes = 3,
-                timeAdverb = AdverbOfTime.AM,
                 pickedDays = Day.entries
             ),
         )

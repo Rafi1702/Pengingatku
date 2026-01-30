@@ -1,10 +1,6 @@
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+package com.example.pengingatku.utils
+
 import com.example.pengingatku.R
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 //package com.example.pengingatku.utils
 //

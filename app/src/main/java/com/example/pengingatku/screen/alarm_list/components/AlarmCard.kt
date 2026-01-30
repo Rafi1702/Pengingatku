@@ -34,7 +34,7 @@ fun TimerCard(
     onSelectedTimerInfo: (Uuid) -> Unit,
     onNavigate: () -> Unit
 ) {
-    val (label, hours, minutes, timeAdverb, isChecked, pickedDays) = timerInformation
+    val (label, hours, minutes, isChecked, pickedDays) = timerInformation
 
     Box(
         modifier = Modifier
@@ -67,7 +67,7 @@ fun TimerCard(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    timeAdverb.name,
+                    timerInformation.getTimeAdverb.name,
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                 )
             }

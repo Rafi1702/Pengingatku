@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_list
+package com.example.pengingatku.screen.alarm_list
 
 import androidx.lifecycle.ViewModel
 

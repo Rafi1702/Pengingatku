@@ -1,6 +1,6 @@
 package com.example.pengingatku
 
-import ScreenNavigation
+import com.example.pengingatku.utils.ScreenNavigation
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
