@@ -1,7 +1,6 @@
 package com.example.pengingatku.data.repository
 
 import android.content.Context
-import android.util.Log
 import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.data.datasource.local.AppDatabase
 import com.example.pengingatku.data.datasource.mappers.fromAlarmEntity
@@ -9,17 +8,9 @@ import com.example.pengingatku.data.datasource.mappers.fromAlarmEntityList
 import com.example.pengingatku.data.datasource.mappers.toAlarmEntity
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -52,6 +43,10 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 
     suspend fun findAlarmById(alarmId: Uuid): AlarmInformation?{
         return db.alarmDao().getAlarmById(alarmId.toString())?.fromAlarmEntity()
+    }
+
+    suspend fun deleteAlarm(alarmInformation: AlarmInformation){
+        return db.alarmDao().deleteAlarm(alarmInformation.toAlarmEntity())
     }
 
 

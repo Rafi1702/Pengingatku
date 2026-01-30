@@ -214,7 +214,7 @@ fun AppNavHost(
     ) {
     val appContext = LocalContext.current.applicationContext
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
-    val alarmRepository =AlarmRepository(context = appContext, lifecycleScope)
+    val alarmRepository = AlarmRepository(context = appContext, lifecycleScope)
     val stopWatchRepository = StopwatchRepository()
     NavHost(
         navController,
@@ -254,7 +254,7 @@ fun AppNavHost(
         composable(route = ScreenNavigation.AddTimer.route) {
             AlarmEditScreen(
                 timerId = null,
-                timerRepository = alarmRepository,
+                alarmRepository = alarmRepository,
                 onNavigateToTimerList = {
                     navController.navigate(ScreenNavigation.TimerList.route)
                 }
@@ -274,7 +274,7 @@ fun AppNavHost(
                 onNavigateToTimerList = {
                     navController.navigate(ScreenNavigation.TimerList.route)
                 },
-                timerRepository = alarmRepository,
+                alarmRepository = alarmRepository,
                 timerId = uuid
 
             )

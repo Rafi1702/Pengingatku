@@ -44,12 +44,12 @@ import kotlin.uuid.Uuid
 fun AlarmEditScreen(
     onNavigateToTimerList: () -> Unit,
     timerId: Uuid?,
-    timerRepository: AlarmRepository
+    alarmRepository: AlarmRepository
 ) {
     val scope = rememberCoroutineScope()
 
 
-    val timerInformationState = loadTimerInformation(timerId, timerRepository)
+    val timerInformationState = loadTimerInformation(timerId, alarmRepository)
 
 
     val showDialog = remember { mutableStateOf(false) }
@@ -70,7 +70,7 @@ fun AlarmEditScreen(
                 confirmButton = {
                     TextButton(onClick = {
                         scope.launch {
-//                            timerRepository.deleteTimer(originalTimerInformation.id)
+                            alarmRepository.deleteAlarm(originalTimerInformation)
                         }
                         showDialog.value = false
 
@@ -167,9 +167,9 @@ fun AlarmEditScreen(
                         onClick = {
                             scope.launch {
                                 if (timerId != null) {
-                                    timerRepository.updateAlarm(editedTimerInformation.value)
+                                    alarmRepository.updateAlarm(editedTimerInformation.value)
                                 } else {
-                                    timerRepository.addTimer(editedTimerInformation.value)
+                                    alarmRepository.addTimer(editedTimerInformation.value)
                                 }
                             }
 

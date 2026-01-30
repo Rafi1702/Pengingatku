@@ -1,6 +1,7 @@
 package com.example.pengingatku.data.datasource.local.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -25,4 +26,8 @@ interface AlarmDao{
 
     @Update
     suspend fun updateAlarm(alarm: AlarmEntity)
+
+    @Delete
+    suspend fun deleteAlarm(alarm: AlarmEntity)
+
 }
