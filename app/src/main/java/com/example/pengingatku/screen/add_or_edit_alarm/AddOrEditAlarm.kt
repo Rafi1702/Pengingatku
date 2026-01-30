@@ -28,9 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.pengingatku.LocalModifier
-import com.example.pengingatku.TimerInformation
+import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.data.repository.AlarmRepository
-import com.example.pengingatku.getDefaultTimerInformation
+import com.example.pengingatku.getDefaultAlarmInformation
 import com.example.pengingatku.screen.add_or_edit_alarm.components.BottomEditTimerContainer
 import com.example.pengingatku.screen.add_or_edit_alarm.components.HourPicker
 import com.example.pengingatku.screen.add_or_edit_alarm.components.PickerType
@@ -86,7 +86,7 @@ fun AlarmEditScreen(
         is StateHelper.Success -> {
             Log.d("TIMER_EDIT", "${state.data}")
             val editedTimerInformation = remember {
-                mutableStateOf(state.data.getDefaultTimerInformation())
+                mutableStateOf(state.data.getDefaultAlarmInformation())
             }
 
             val isValueChanged = remember {
@@ -238,8 +238,8 @@ fun RowScope.WeightBox(
 fun loadTimerInformation(
     timerId: Uuid?,
     alarmRepository: AlarmRepository
-): State<StateHelper<TimerInformation?>> {
-    return produceState<StateHelper<TimerInformation?>>(
+): State<StateHelper<AlarmInformation?>> {
+    return produceState<StateHelper<AlarmInformation?>>(
         initialValue = StateHelper.Loading,
         key1 = timerId,
         key2 = alarmRepository
@@ -249,7 +249,7 @@ fun loadTimerInformation(
                 val data = alarmRepository.findTimerById(timerId)
                 StateHelper.Success(data)
             }else {
-                StateHelper.Success(null.getDefaultTimerInformation())
+                StateHelper.Success(null.getDefaultAlarmInformation())
             }
 
         } catch (e: Exception) {

@@ -8,8 +8,8 @@ import com.example.pengingatku.data.datasource.local.entities.AlarmEntity
 interface AlarmDao{
 
     @Query("SELECT * FROM alarm")
-    fun getAllAlarm(): List<AlarmEntity>
+   suspend fun getAllAlarm(): List<AlarmEntity>
 
     @Query("SELECT * FROM alarm WHERE id = :alarmId")
-    fun getAlarmById(alarmId: String)
+    suspend fun getAlarmById(alarmId: String): AlarmEntity
 }

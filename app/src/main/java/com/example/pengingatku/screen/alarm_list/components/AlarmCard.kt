@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.pengingatku.TimerInformation
+import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.components.SwitchToggle
 import com.example.pengingatku.utils.timeTextFormat
 import kotlin.uuid.ExperimentalUuidApi
@@ -30,7 +30,7 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun TimerCard(
-    timerInformation: TimerInformation,
+    timerInformation: AlarmInformation,
     onSelectedTimerInfo: (Uuid) -> Unit,
     onNavigate: () -> Unit
 ) {

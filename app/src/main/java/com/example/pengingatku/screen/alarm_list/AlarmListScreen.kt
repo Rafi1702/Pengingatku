@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,7 +29,7 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun AlarmListScreen(
-    alarmRepository: AlarmRepository = AlarmRepository(),
+    alarmRepository: AlarmRepository,
     onNavigate: (Uuid) -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -70,11 +71,18 @@ fun AlarmListScreen(
                 } else {
                     Text(
                         "Data Kosong",
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
 
             is StateHelper.Failure -> {
+                Text(
+                    "${state.exception}",
+                    style = MaterialTheme.typography.labelLarge
+                )
+
+
 
             }
 

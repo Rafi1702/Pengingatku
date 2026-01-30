@@ -1,9 +1,12 @@
 package com.example.pengingatku.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.example.pengingatku.AdverbOfTime
 import com.example.pengingatku.utils.Day
-import com.example.pengingatku.TimerInformation
+import com.example.pengingatku.AlarmInformation
+import com.example.pengingatku.data.datasource.local.AppDatabase
+import com.example.pengingatku.data.datasource.mappers.fromAlarmEntityList
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +20,13 @@ import kotlin.uuid.Uuid
 
 
 @OptIn(ExperimentalUuidApi::class)
-class AlarmRepository {
-    private val timerData = MutableStateFlow<StateHelper<List<TimerInformation>>>(
+class AlarmRepository(context: Context) {
+    private val timerData = MutableStateFlow<StateHelper<List<AlarmInformation>>>(
         StateHelper.Loading
 
     )
+
+    private val db = AppDatabase.getDatabase(context= context)
 
     val timerFlow = timerData.asStateFlow()
 
@@ -43,7 +48,7 @@ class AlarmRepository {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    suspend fun editTimer(timerInformation: TimerInformation) {
+    suspend fun editTimer(timerInformation: AlarmInformation) {
         val timerState = (timerData.value as? StateHelper.Success)?.data
 
         timerState?.let { originalTimer ->
@@ -56,37 +61,38 @@ class AlarmRepository {
 
     suspend fun getTimerDatas() {
         delay(3000)
-        val timerDatas = listOf(
-            TimerInformation(
-                label = "Work",
-                hours = 12,
-                minutes = 3,
-                pickedDays = listOf(Day.SUNDAY, Day.MONDAY)
-            ),
+//        val timerDatas = listOf(
+//            TimerInformation(
+//                label = "Work",
+//                hours = 12,
+//                minutes = 3,
+//                pickedDays = listOf(Day.SUNDAY, Day.MONDAY)
+//            ),
+//
+//            TimerInformation(
+//                label = "Work",
+//                hours = 12,
+//                minutes = 3,
+//            ),
+//
+//            TimerInformation(
+//                label = "Work",
+//                hours = 12,
+//                minutes = 3,
+//            ),
+//            TimerInformation(
+//                label = "Study",
+//                hours = 12,
+//                minutes = 3,
+//                pickedDays = Day.entries
+//            ),
+//        )
 
-            TimerInformation(
-                label = "Work",
-                hours = 12,
-                minutes = 3,
-            ),
 
-            TimerInformation(
-                label = "Work",
-                hours = 12,
-                minutes = 3,
-            ),
-            TimerInformation(
-                label = "Study",
-                hours = 12,
-                minutes = 3,
-                pickedDays = Day.entries
-            ),
-        )
 
         try {
-            timerData.emit(StateHelper.Success(timerDatas))
-
-
+            val timerDatas = db.alarmDao().getAllAlarm()
+            timerData.emit(StateHelper.Success(timerDatas.fromAlarmEntityList()))
 
             Log.d("REPOSITORY", "SUCCESS $timerDatas")
 
@@ -98,13 +104,13 @@ class AlarmRepository {
 
     }
 
-    suspend fun findTimerById(timerId: Uuid?): TimerInformation? {
+    suspend fun findTimerById(timerId: Uuid?): AlarmInformation? {
         delay(1500)
         val timerState = (timerData.value as? StateHelper.Success)?.data
         return timerState?.find { it.id == timerId }
     }
 
-    suspend fun addTimer(newTimerInformation: TimerInformation) {
+    suspend fun addTimer(newTimerInformation: AlarmInformation) {
         val timerState = (timerData.value as? StateHelper.Success)?.data
 
         timerState?.let {

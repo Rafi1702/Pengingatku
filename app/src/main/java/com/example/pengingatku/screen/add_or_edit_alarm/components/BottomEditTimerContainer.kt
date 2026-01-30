@@ -29,15 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.pengingatku.utils.Day
-import com.example.pengingatku.TimerInformation
+import com.example.pengingatku.AlarmInformation
 import java.util.Locale.getDefault
 import kotlin.uuid.ExperimentalUuidApi
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun BottomEditTimerContainer(
-    timerInformation: TimerInformation,
-    onTimerInformationChanged: (TimerInformation) -> Unit,
+    timerInformation: AlarmInformation,
+    onTimerInformationChanged: (AlarmInformation) -> Unit,
 ) {
 
     val newTimerInformation = remember {

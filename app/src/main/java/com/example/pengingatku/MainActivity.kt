@@ -58,9 +58,11 @@ import com.example.pengingatku.ui.theme.PengingatkuTheme
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.pengingatku.data.datasource.local.AppDatabase
 import com.example.pengingatku.data.repository.StopwatchRepository
 import com.example.pengingatku.data.repository.AlarmRepository
 import kotlin.uuid.ExperimentalUuidApi
@@ -208,14 +210,17 @@ fun AppNavHost(
     navController: NavHostController,
 
     ) {
+    val appContext = LocalContext.current.applicationContext
+    val alarmRepository = remember { AlarmRepository(context = appContext) }
+    val stopWatchRepository = StopwatchRepository()
     NavHost(
         navController,
         startDestination = "main_graph",
         enterTransition = { fadeIn(animationSpec = tween(200)) },
         exitTransition = { fadeOut(animationSpec = tween(200)) }
     ) {
-        val alarmRepository = AlarmRepository()
-        val stopWatchRepository = StopwatchRepository()
+
+
         // isi dengan NavGraphBuilder atau composable
 
         /* Kode Di Dalam Builder NavHost (lambda yang dibutuhkan dari NavHost)*/

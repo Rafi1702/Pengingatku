@@ -16,7 +16,7 @@ enum class AdverbOfTime {
 
 
 @OptIn(ExperimentalUuidApi::class)
-data class TimerInformation(
+data class AlarmInformation(
     val label: String,
     val hours: Int,
     val minutes: Int,
@@ -26,12 +26,12 @@ data class TimerInformation(
 ){
     val getTimeAdverb = if(hours < 12) AdverbOfTime.AM else AdverbOfTime.PM
 }
-//fun getDefaultTimerInformation(): TimerInformation{
+//fun getDefaultAlarmInformation(): AlarmInformation{
 //    return
 //}
 
 @OptIn(ExperimentalUuidApi::class)
-fun TimerInformation?.getDefaultTimerInformation() = this?: TimerInformation(
+fun AlarmInformation?.getDefaultAlarmInformation() = this?: AlarmInformation(
     label = "Not Available",
     hours = 0,
     minutes = 0,
