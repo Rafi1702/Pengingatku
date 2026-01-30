@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.add_or_edit_timer
+package com.example.pengingatku.screen.add_or_edit_alarm
 
 
 import android.util.Log
@@ -29,11 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.pengingatku.LocalModifier
 import com.example.pengingatku.TimerInformation
-import com.example.pengingatku.data.repository.TimerRepository
+import com.example.pengingatku.data.repository.AlarmRepository
 import com.example.pengingatku.getDefaultTimerInformation
-import com.example.pengingatku.screen.add_or_edit_timer.components.BottomEditTimerContainer
-import com.example.pengingatku.screen.add_or_edit_timer.components.HourPicker
-import com.example.pengingatku.screen.add_or_edit_timer.components.PickerType
+import com.example.pengingatku.screen.add_or_edit_alarm.components.BottomEditTimerContainer
+import com.example.pengingatku.screen.add_or_edit_alarm.components.HourPicker
+import com.example.pengingatku.screen.add_or_edit_alarm.components.PickerType
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
@@ -41,10 +41,10 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
-fun TimerEditScreen(
+fun AlarmEditScreen(
     onNavigateToTimerList: () -> Unit,
     timerId: Uuid?,
-    timerRepository: TimerRepository
+    timerRepository: AlarmRepository
 ) {
     val scope = rememberCoroutineScope()
 
@@ -237,16 +237,16 @@ fun RowScope.WeightBox(
 @Composable
 fun loadTimerInformation(
     timerId: Uuid?,
-    timerRepository: TimerRepository
+    alarmRepository: AlarmRepository
 ): State<StateHelper<TimerInformation?>> {
     return produceState<StateHelper<TimerInformation?>>(
         initialValue = StateHelper.Loading,
         key1 = timerId,
-        key2 = timerRepository
+        key2 = alarmRepository
     ) {
         val state = try {
             if(timerId!=null){
-                val data = timerRepository.findTimerById(timerId)
+                val data = alarmRepository.findTimerById(timerId)
                 StateHelper.Success(data)
             }else {
                 StateHelper.Success(null.getDefaultTimerInformation())

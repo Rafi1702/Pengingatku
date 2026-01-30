@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_list.components
+package com.example.pengingatku.screen.alarm_list.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment

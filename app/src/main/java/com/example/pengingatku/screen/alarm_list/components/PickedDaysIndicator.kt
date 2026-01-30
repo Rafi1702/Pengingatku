@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_list.components
+package com.example.pengingatku.screen.alarm_list.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

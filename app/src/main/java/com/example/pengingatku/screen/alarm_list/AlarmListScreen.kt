@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.timer_list
+package com.example.pengingatku.screen.alarm_list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pengingatku.LocalModifier
-import com.example.pengingatku.data.repository.TimerRepository
-import com.example.pengingatku.screen.timer_list.components.TimerCard
+import com.example.pengingatku.data.repository.AlarmRepository
+import com.example.pengingatku.screen.alarm_list.components.TimerCard
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
@@ -27,14 +27,14 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
-fun TimerListScreen(
-    timerRepository: TimerRepository = TimerRepository(),
+fun AlarmListScreen(
+    alarmRepository: AlarmRepository = AlarmRepository(),
     onNavigate: (Uuid) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
 
-    val uiState by timerRepository.timerFlow.collectAsStateWithLifecycle()
+    val uiState by alarmRepository.timerFlow.collectAsStateWithLifecycle()
 
 
     Box(modifier = LocalModifier.current.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -61,7 +61,7 @@ fun TimerListScreen(
                                 onNavigate = { onNavigate(data.id) },
                                 onSelectedTimerInfo = { id ->
                                     scope.launch {
-                                        timerRepository.selectedTimer(id)
+                                        alarmRepository.selectedTimer(id)
                                     }
                                 }
                             )

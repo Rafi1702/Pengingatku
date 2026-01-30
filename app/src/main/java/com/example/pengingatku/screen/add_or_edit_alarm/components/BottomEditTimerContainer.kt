@@ -1,4 +1,4 @@
-package com.example.pengingatku.screen.add_or_edit_timer.components
+package com.example.pengingatku.screen.add_or_edit_alarm.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement

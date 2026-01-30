@@ -52,8 +52,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.pengingatku.screen.stop_watch.StopWatchScreen
-import com.example.pengingatku.screen.add_or_edit_timer.TimerEditScreen
-import com.example.pengingatku.screen.timer_list.TimerListScreen
+import com.example.pengingatku.screen.add_or_edit_alarm.AlarmEditScreen
+import com.example.pengingatku.screen.alarm_list.AlarmListScreen
 import com.example.pengingatku.ui.theme.PengingatkuTheme
 
 import androidx.compose.ui.graphics.Color
@@ -62,7 +62,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.pengingatku.data.repository.StopwatchRepository
-import com.example.pengingatku.data.repository.TimerRepository
+import com.example.pengingatku.data.repository.AlarmRepository
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -214,7 +214,7 @@ fun AppNavHost(
         enterTransition = { fadeIn(animationSpec = tween(200)) },
         exitTransition = { fadeOut(animationSpec = tween(200)) }
     ) {
-        val timerRepository = TimerRepository()
+        val alarmRepository = AlarmRepository()
         val stopWatchRepository = StopwatchRepository()
         // isi dengan NavGraphBuilder atau composable
 
@@ -225,8 +225,8 @@ fun AppNavHost(
         ) {
 
             composable(ScreenNavigation.TimerList.route) {
-                TimerListScreen(
-                    timerRepository = timerRepository,
+                AlarmListScreen(
+                    alarmRepository = alarmRepository,
                     onNavigate = { timerId ->
                         navController.navigate(
                             ScreenNavigation.EditTimer.createRoute(
@@ -243,10 +243,10 @@ fun AppNavHost(
             }
         }
 
-        composable(route = ScreenNavigation.AddTimer.route){
-            TimerEditScreen(
+        composable(route = ScreenNavigation.AddTimer.route) {
+            AlarmEditScreen(
                 timerId = null,
-                timerRepository = timerRepository,
+                timerRepository = alarmRepository,
                 onNavigateToTimerList = {
                     navController.navigate(ScreenNavigation.TimerList.route)
                 }
@@ -262,11 +262,11 @@ fun AppNavHost(
             val uuid = id?.let { Uuid.parse(it) }
 
             id
-            TimerEditScreen(
+            AlarmEditScreen(
                 onNavigateToTimerList = {
                     navController.navigate(ScreenNavigation.TimerList.route)
                 },
-                timerRepository = timerRepository,
+                timerRepository = alarmRepository,
                 timerId = uuid
 
             )

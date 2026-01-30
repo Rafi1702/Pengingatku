@@ -17,7 +17,7 @@ import kotlin.uuid.Uuid
 
 
 @OptIn(ExperimentalUuidApi::class)
-class TimerRepository {
+class AlarmRepository {
     private val timerData = MutableStateFlow<StateHelper<List<TimerInformation>>>(
         StateHelper.Loading
 
