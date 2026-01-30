@@ -62,6 +62,7 @@ fun AlarmListScreen(
                                 onSelectedTimerInfo = { id ->
                                     scope.launch {
 //                                        alarmRepository.selectedTimer(id)
+                                        alarmRepository.toggleCheck(id, !data.isChecked )
                                     }
                                 }
                             )

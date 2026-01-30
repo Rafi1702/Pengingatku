@@ -16,6 +16,10 @@ interface AlarmDao{
     @Query("SELECT * FROM alarm WHERE id = :alarmId")
     suspend fun getAlarmById(alarmId: String): AlarmEntity?
 
+
+    @Query("UPDATE alarm SET active = :isActive WHERE id = :alarmId")
+    suspend fun updateCheckStatus(alarmId: String, isActive: Boolean)
+
     @Insert
     suspend fun insertAlarm(alarm: AlarmEntity)
 

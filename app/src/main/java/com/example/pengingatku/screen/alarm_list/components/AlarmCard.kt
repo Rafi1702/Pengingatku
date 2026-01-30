@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.components.SwitchToggle
 import com.example.pengingatku.utils.timeTextFormat
+import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -91,6 +93,7 @@ fun TimerCard(
                 SwitchToggle(
                     isChecked = isChecked,
                     onCheckedChange = { _ ->
+
                         onSelectedTimerInfo(timerInformation.id)
                     }
                 )

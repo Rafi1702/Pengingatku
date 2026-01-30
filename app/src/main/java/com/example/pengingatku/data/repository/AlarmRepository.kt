@@ -42,6 +42,10 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
         db.alarmDao().insertAlarm(newAlarmInformation.toAlarmEntity())
     }
 
+    suspend fun toggleCheck(alarmId: Uuid, isActive: Boolean){
+        db.alarmDao().updateCheckStatus(alarmId.toString(), isActive)
+    }
+
     suspend fun updateAlarm(newAlarmInformation: AlarmInformation){
         db.alarmDao().updateAlarm(newAlarmInformation.toAlarmEntity())
     }
