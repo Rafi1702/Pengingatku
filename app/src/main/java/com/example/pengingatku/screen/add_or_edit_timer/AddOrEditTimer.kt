@@ -51,6 +51,7 @@ fun TimerEditScreen(
 
     val timerInformationState = loadTimerInformation(timerId, timerRepository)
 
+
     val showDialog = remember { mutableStateOf(false) }
 
     if (showDialog.value) {
@@ -90,8 +91,8 @@ fun TimerEditScreen(
 
             val isValueChanged = remember {
                 derivedStateOf {
-                    editedTimerInformation.value != state.data.getDefaultTimerInformation()
-                        .copy(id = editedTimerInformation.value.id)
+                    editedTimerInformation.value != state.data?.copy(id = editedTimerInformation.value.id)
+
                 }
             }
 
@@ -244,8 +245,13 @@ fun loadTimerInformation(
         key2 = timerRepository
     ) {
         val state = try {
-            val data = timerRepository.findTimerById(timerId)
-            StateHelper.Success(data)
+            if(timerId!=null){
+                val data = timerRepository.findTimerById(timerId)
+                StateHelper.Success(data)
+            }else {
+                StateHelper.Success(null.getDefaultTimerInformation())
+            }
+
         } catch (e: Exception) {
             StateHelper.Failure(e)
         }
