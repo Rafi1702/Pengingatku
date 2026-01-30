@@ -1,10 +1,7 @@
-package com.example.pengingatku.data.datasource
-
-import com.example.pengingatku.TimerInformation
-
+package com.example.pengingatku.data.datasource.network
 
 //TODO:: Implementing Network Data Source
-class TimerNetworkDatasource {
+class AlarmNetworkDatasource {
 
     //TODO: GET TIMERS
     suspend fun getTimers() {
