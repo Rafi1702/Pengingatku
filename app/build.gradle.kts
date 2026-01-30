@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 android {
@@ -74,6 +75,11 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
+
+    //LOCAL DB
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    annotationProcessor(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
