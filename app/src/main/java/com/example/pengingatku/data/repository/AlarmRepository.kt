@@ -1,6 +1,7 @@
 package com.example.pengingatku.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.data.datasource.local.AppDatabase
 import com.example.pengingatku.data.datasource.mappers.fromAlarmEntity
@@ -12,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.util.Calendar
 
 
 class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
@@ -29,18 +31,27 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 
 
     suspend fun addTimer(newAlarmInformation: AlarmInformation) {
-        val test = newAlarmInformation.copy(minutes = 57, hours = 11)
-        db.alarmDao().insertAlarm(test.copy(isChecked = true).toAlarmEntity())
+        val now = Calendar.getInstance()
+        val hour = now.get(Calendar.HOUR_OF_DAY)
+        val minute = now.get(Calendar.MINUTE)
+        val test = newAlarmInformation.copy(minutes = minute + 2, hours = hour)
+
+        val insertedId = db.alarmDao().insertAlarm(test.copy(isChecked = true).toAlarmEntity())
 
         alarmScheduler.setScheduler(
             minutes = test.minutes,
             hours = test.hours,
-            alarmId = test.id
+            alarmId = insertedId.toInt()
         )
+
     }
 
     suspend fun toggleCheck(alarmId: Int, isActive: Boolean) {
         db.alarmDao().updateCheckStatus(alarmId, isActive)
+        alarmScheduler.cancelScheduler(
+            alarmId = alarmId,
+            isAlarmActive = isActive
+        )
     }
 
     suspend fun updateAlarm(newAlarmInformation: AlarmInformation) {

@@ -9,10 +9,7 @@ import com.example.pengingatku.utils.Day
 data class AlarmEntity(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-//
-//    @PrimaryKey(autoGenerate = false)
-//    val id: String,
+    val id: Int = 0,
 
     @ColumnInfo(name = "name") val name: String,
 

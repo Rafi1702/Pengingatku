@@ -22,7 +22,7 @@ interface AlarmDao{
     suspend fun updateCheckStatus(alarmId:Int, isActive: Boolean)
 
     @Insert
-    suspend fun insertAlarm(alarm: AlarmEntity)
+    suspend fun insertAlarm(alarm: AlarmEntity): Long
 
     @Update
     suspend fun updateAlarm(alarm: AlarmEntity)

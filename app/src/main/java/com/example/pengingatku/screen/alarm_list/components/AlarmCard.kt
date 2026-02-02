@@ -1,5 +1,6 @@
 package com.example.pengingatku.screen.alarm_list.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +38,9 @@ fun TimerCard(
     onSelectedTimerInfo: (Int) -> Unit,
     onNavigate: () -> Unit
 ) {
-    val (label, hours, minutes, isChecked, pickedDays) = timerInformation
+    val (label, hours, minutes, isChecked, pickedDays, id) = timerInformation
+
+    Log.d("COMPOSABLE", "Alarm id: $id")
 
     Box(
         modifier = Modifier

@@ -27,7 +27,6 @@ fun AlarmEntity.fromAlarmEntity(): AlarmInformation {
 fun AlarmInformation.toAlarmEntity(): AlarmEntity {
     val time = "${this.hours.timeTextFormat()}:${this.minutes.timeTextFormat()}"
     return AlarmEntity(
-        id = this.id,
         name = this.label,
         time = time,
         isChecked = this.isChecked,
