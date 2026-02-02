@@ -7,7 +7,6 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 
-@OptIn(ExperimentalUuidApi::class)
 fun AlarmEntity.fromAlarmEntity(): AlarmInformation {
     val time = this.time.split(":")
 
@@ -15,7 +14,7 @@ fun AlarmEntity.fromAlarmEntity(): AlarmInformation {
     val minutes = time[1].toInt()
 
     return AlarmInformation(
-        id = Uuid.parse(this.id),
+        id = this.id,
         isChecked = this.isChecked,
         hours = hours,
         minutes = minutes,
@@ -25,11 +24,10 @@ fun AlarmEntity.fromAlarmEntity(): AlarmInformation {
         )
 }
 
-@OptIn(ExperimentalUuidApi::class)
 fun AlarmInformation.toAlarmEntity(): AlarmEntity {
     val time = "${this.hours.timeTextFormat()}:${this.minutes.timeTextFormat()}"
     return AlarmEntity(
-        id = this.id.toString(),
+        id = this.id,
         name = this.label,
         time = time,
         isChecked = this.isChecked,

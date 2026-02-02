@@ -15,11 +15,11 @@ interface AlarmDao{
    fun getAllAlarm(): Flow<List<AlarmEntity>>
 
     @Query("SELECT * FROM alarm WHERE id = :alarmId")
-    suspend fun getAlarmById(alarmId: String): AlarmEntity?
+    suspend fun getAlarmById(alarmId: Int): AlarmEntity?
 
 
     @Query("UPDATE alarm SET active = :isActive WHERE id = :alarmId")
-    suspend fun updateCheckStatus(alarmId: String, isActive: Boolean)
+    suspend fun updateCheckStatus(alarmId:Int, isActive: Boolean)
 
     @Insert
     suspend fun insertAlarm(alarm: AlarmEntity)

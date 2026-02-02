@@ -11,11 +11,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 
-@OptIn(ExperimentalUuidApi::class)
+
+
 class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 
     private val db = AppDatabase.getDatabase(context = context)
@@ -33,16 +32,16 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
         db.alarmDao().insertAlarm(newAlarmInformation.toAlarmEntity())
     }
 
-    suspend fun toggleCheck(alarmId: Uuid, isActive: Boolean){
-        db.alarmDao().updateCheckStatus(alarmId.toString(), isActive)
+    suspend fun toggleCheck(alarmId: Int, isActive: Boolean){
+        db.alarmDao().updateCheckStatus(alarmId, isActive)
     }
 
     suspend fun updateAlarm(newAlarmInformation: AlarmInformation){
         db.alarmDao().updateAlarm(newAlarmInformation.toAlarmEntity())
     }
 
-    suspend fun findAlarmById(alarmId: Uuid): AlarmInformation?{
-        return db.alarmDao().getAlarmById(alarmId.toString())?.fromAlarmEntity()
+    suspend fun findAlarmById(alarmId: Int): AlarmInformation?{
+        return db.alarmDao().getAlarmById(alarmId)?.fromAlarmEntity()
     }
 
     suspend fun deleteAlarm(alarmInformation: AlarmInformation){
@@ -69,7 +68,7 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 //    val timerFlow = timerData.asStateFlow()
 
 
-//    suspend fun deleteTimer(id: Uuid) {
+//    suspend fun deleteTimer(id: Int) {
 //        val timerState = (timerData.value as? StateHelper.Success)?.data
 //
 //        timerState?.let { originalTimer ->
@@ -79,7 +78,7 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 
 
 //
-//    suspend fun selectedTimer(id: Uuid) {
+//    suspend fun selectedTimer(id: Int) {
 //        val timerState = (timerData.value as? StateHelper.Success)?.data
 //        val updatedTimerData =
 //            timerState?.map { if (it.id == id) it.copy(isChecked = !it.isChecked) else it }
@@ -89,7 +88,7 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 //        }
 //    }
 
-//    @OptIn(ExperimentalUuidApi::class)
+//    @OptIn(ExperimentalIntApi::class)
 //    suspend fun editTimer(timerInformation: AlarmInformation) {
 //        val timerState = (timerData.value as? StateHelper.Success)?.data
 //

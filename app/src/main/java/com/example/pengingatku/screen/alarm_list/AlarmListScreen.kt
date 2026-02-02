@@ -26,11 +26,10 @@ import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun AlarmListScreen(
     alarmRepository: AlarmRepository,
-    onNavigate: (Uuid) -> Unit
+    onNavigate: (Int) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 

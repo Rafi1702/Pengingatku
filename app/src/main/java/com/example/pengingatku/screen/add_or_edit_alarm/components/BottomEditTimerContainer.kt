@@ -33,7 +33,7 @@ import com.example.pengingatku.AlarmInformation
 import java.util.Locale.getDefault
 import kotlin.uuid.ExperimentalUuidApi
 
-@OptIn(ExperimentalUuidApi::class)
+
 @Composable
 fun BottomEditTimerContainer(
     timerInformation: AlarmInformation,

@@ -7,8 +7,12 @@ import com.example.pengingatku.utils.Day
 
 @Entity(tableName= "alarm")
 data class AlarmEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: String,
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+//
+//    @PrimaryKey(autoGenerate = false)
+//    val id: String,
 
     @ColumnInfo(name = "name") val name: String,
 
