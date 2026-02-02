@@ -30,11 +30,11 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 
-@OptIn(ExperimentalUuidApi::class)
+
 @Composable
 fun TimerCard(
     timerInformation: AlarmInformation,
-    onSelectedTimerInfo: (Uuid) -> Unit,
+    onSelectedTimerInfo: (Int) -> Unit,
     onNavigate: () -> Unit
 ) {
     val (label, hours, minutes, isChecked, pickedDays) = timerInformation

@@ -7,17 +7,17 @@ import com.example.pengingatku.data.datasource.mappers.fromAlarmEntity
 import com.example.pengingatku.data.datasource.mappers.fromAlarmEntityList
 import com.example.pengingatku.data.datasource.mappers.toAlarmEntity
 import com.example.pengingatku.utils.StateHelper
+import com.example.pengingatku.worker.AlarmScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 
-
-
 class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 
     private val db = AppDatabase.getDatabase(context = context)
+    private val alarmScheduler = AlarmScheduler(context = context)
 
     val getTimerDatas = db.alarmDao().getAllAlarm().map {
         StateHelper.Success(it.fromAlarmEntityList())
@@ -29,22 +29,29 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
 
 
     suspend fun addTimer(newAlarmInformation: AlarmInformation) {
-        db.alarmDao().insertAlarm(newAlarmInformation.toAlarmEntity())
+        val test = newAlarmInformation.copy(minutes = 57, hours = 11)
+        db.alarmDao().insertAlarm(test.copy(isChecked = true).toAlarmEntity())
+
+        alarmScheduler.setScheduler(
+            minutes = test.minutes,
+            hours = test.hours,
+            alarmId = test.id
+        )
     }
 
-    suspend fun toggleCheck(alarmId: Int, isActive: Boolean){
+    suspend fun toggleCheck(alarmId: Int, isActive: Boolean) {
         db.alarmDao().updateCheckStatus(alarmId, isActive)
     }
 
-    suspend fun updateAlarm(newAlarmInformation: AlarmInformation){
+    suspend fun updateAlarm(newAlarmInformation: AlarmInformation) {
         db.alarmDao().updateAlarm(newAlarmInformation.toAlarmEntity())
     }
 
-    suspend fun findAlarmById(alarmId: Int): AlarmInformation?{
+    suspend fun findAlarmById(alarmId: Int): AlarmInformation? {
         return db.alarmDao().getAlarmById(alarmId)?.fromAlarmEntity()
     }
 
-    suspend fun deleteAlarm(alarmInformation: AlarmInformation){
+    suspend fun deleteAlarm(alarmInformation: AlarmInformation) {
         return db.alarmDao().deleteAlarm(alarmInformation.toAlarmEntity())
     }
 
