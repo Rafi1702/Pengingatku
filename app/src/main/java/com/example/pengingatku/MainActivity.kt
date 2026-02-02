@@ -3,6 +3,7 @@ package com.example.pengingatku
 import com.example.pengingatku.utils.ScreenNavigation
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -93,15 +94,27 @@ val LocalModifier = staticCompositionLocalOf<Modifier> { Modifier }
 @Composable
 fun Main() {
     val navController = rememberNavController()
-    val navigationBottomBar = ScreenNavigation.bottomBarScreen.map { it.route }
+
+    val navigationBottomBar = remember { ScreenNavigation.bottomBarScreen.map { it.route } }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
 
-    val isBottomBarVisible by remember {
-        derivedStateOf { navBackStackEntry?.destination?.hierarchy?.any { it.route in navigationBottomBar } == true }
+    val isBottomBarVisible = remember(currentRoute) {
+        derivedStateOf { currentRoute in navigationBottomBar }
     }
+
+    Log.d("ROOT", "isBottomBarVisible: ${isBottomBarVisible.value}")
+
+    val isNavigationBackVisible = remember(currentRoute) {
+        derivedStateOf { !isBottomBarVisible.value && currentRoute != null }
+    }
+
+    Log.d(
+        "ROOT",
+        "isNavigationBackVisible: ${isNavigationBackVisible.value} , currentRoute: $currentRoute"
+    )
 
 
     Scaffold(
@@ -118,7 +131,7 @@ fun Main() {
                     Text(ScreenNavigation.getTitle(currentRoute))
                 },
                 navigationIcon = {
-                    if (!isBottomBarVisible) {
+                    if (isNavigationBackVisible.value) {
                         IconButton(onClick = {
                             navController.popBackStack()
                         }) {
@@ -145,7 +158,7 @@ fun Main() {
         bottomBar = {
 
             AnimatedVisibility(
-                visible = isBottomBarVisible,
+                visible = isBottomBarVisible.value,
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it })
             ) {
@@ -174,7 +187,7 @@ fun Main() {
 
         floatingActionButton = {
 
-            if (isBottomBarVisible) {
+            if (isBottomBarVisible.value) {
                 FloatingActionButton(
                     modifier = Modifier.offset(y = 40.dp),
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -206,7 +219,6 @@ fun Main() {
 }
 
 
-@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -238,7 +250,7 @@ fun AppNavHost(
                     onNavigate = { timerId ->
                         navController.navigate(
                             ScreenNavigation.EditTimer.createRoute(
-                                timerId.toString()
+                                timerId
                             )
                         )
                     }
@@ -263,11 +275,10 @@ fun AppNavHost(
 
         composable(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
-                navArgument("uuidString") { type = NavType.StringType }
+                navArgument("id") { type = NavType.IntType }
             )) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("uuidString")
+            val id = backStackEntry.arguments?.getString("id")?.toInt()
 
-            val uuid = id?.let { Uuid.parse(it) }
 
             id
             AlarmEditScreen(
@@ -275,32 +286,10 @@ fun AppNavHost(
                     navController.navigate(ScreenNavigation.TimerList.route)
                 },
                 alarmRepository = alarmRepository,
-                timerId = uuid
-
+                timerId = id
             )
         }
 
-
-//        composable(BaseNavigationScreen.AddTimer.route) {
-//            AddTimerScreen(toTimerGrids = {
-//                navController.navigate(BottomBarNavigationScreen.TIMER_LIST.route)
-//            })
-//        }
-
-//        composable(
-//            route = "detail/{timerId}",
-//            arguments = listOf(
-//                navArgument("timerId") { type = NavType.IntType }
-//            )
-//        ) { backStackEntry ->
-//            val id = backStackEntry.arguments?.getInt("timerId") ?: 0
-//            TimerDetailScreen(timerId = id, paddingValues = paddingValues)
-//        }
-
-//        composable<TimerInformation> { backStackEntry ->
-//            val timerArgs = backStackEntry.toRoute<TimerInformation>()
-//            TimerDetailScreen(timerId = timerArgs.id, paddingValues = paddingValues)
-//        }
 
     }
 }
