@@ -248,6 +248,7 @@ fun AppNavHost(
                 AlarmListScreen(
                     alarmRepository = alarmRepository,
                     onNavigate = { timerId ->
+                        Log.d("COMPOSABLE", "VALUE OF PASSED alarm id: $timerId")
                         navController.navigate(
                             ScreenNavigation.EditTimer.createRoute(
                                 timerId
@@ -275,12 +276,12 @@ fun AppNavHost(
 
         composable(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
-                navArgument("id") { type = NavType.IntType }
+                navArgument("timerId") { type = NavType.IntType }
             )) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id")?.toInt()
+            val id = backStackEntry.arguments?.getInt("timerId")
 
 
-            id
+
             AlarmEditScreen(
                 onNavigateToTimerList = {
                     navController.navigate(ScreenNavigation.TimerList.route)

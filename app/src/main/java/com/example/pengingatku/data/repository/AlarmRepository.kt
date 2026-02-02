@@ -63,6 +63,7 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
     }
 
     suspend fun deleteAlarm(alarmInformation: AlarmInformation) {
+        Log.d("REPOSITORY", "PASS ALARM ID: ${alarmInformation.id}")
         return db.alarmDao().deleteAlarm(alarmInformation.toAlarmEntity())
     }
 
