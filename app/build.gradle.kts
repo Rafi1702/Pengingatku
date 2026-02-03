@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
     id(libs.plugins.ksp.get().pluginId)
+    alias(libs.plugins.koin.compiler)
 }
 
 android {
@@ -83,10 +84,9 @@ dependencies {
 
     //DEPENDENCY INJECTION
     implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
-
+    implementation(libs.koin.android)
     implementation(libs.gson)
 
     testImplementation(libs.junit)

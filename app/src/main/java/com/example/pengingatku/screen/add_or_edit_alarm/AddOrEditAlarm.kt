@@ -36,15 +36,16 @@ import com.example.pengingatku.screen.add_or_edit_alarm.components.HourPicker
 import com.example.pengingatku.screen.add_or_edit_alarm.components.PickerType
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
-
+import org.koin.compose.koinInject
 
 
 @Composable
 fun AlarmEditScreen(
     onNavigateToTimerList: () -> Unit,
     timerId: Long?,
-    alarmRepository: AlarmRepository
+
 ) {
+    val alarmRepository = koinInject<AlarmRepository>()
     val scope = rememberCoroutineScope()
 
 

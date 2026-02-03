@@ -23,14 +23,13 @@ import com.example.pengingatku.data.repository.AlarmRepository
 import com.example.pengingatku.screen.alarm_list.components.TimerCard
 import com.example.pengingatku.utils.StateHelper
 import kotlinx.coroutines.launch
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import org.koin.compose.koinInject
 
 @Composable
 fun AlarmListScreen(
-    alarmRepository: AlarmRepository,
     onNavigate: (Long) -> Unit
 ) {
+    val alarmRepository = koinInject<AlarmRepository>()
     val scope = rememberCoroutineScope()
 
 
@@ -80,8 +79,6 @@ fun AlarmListScreen(
                     "${state.exception}",
                     style = MaterialTheme.typography.labelLarge
                 )
-
-
 
             }
 
