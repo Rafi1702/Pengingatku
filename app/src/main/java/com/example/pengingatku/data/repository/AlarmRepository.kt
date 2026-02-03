@@ -34,11 +34,11 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
         val now = Calendar.getInstance()
         val hour = now.get(Calendar.HOUR_OF_DAY)
         val minute = now.get(Calendar.MINUTE)
-        val test = newAlarmInformation.copy(minutes = minute + 2, hours = hour)
+        val test = newAlarmInformation.copy(minutes = minute + 6, hours = hour)
 
         val insertedId = db.alarmDao().insertAlarm(test.copy(isChecked = true).toAlarmEntity())
 
-        alarmScheduler.setScheduler(
+        alarmScheduler.callScheduler(
             minutes = test.minutes,
             hours = test.hours,
             alarmId = insertedId.toInt()
