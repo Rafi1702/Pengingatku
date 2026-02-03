@@ -74,12 +74,18 @@ dependencies {
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
+//    implementation(libs.ktor.serialization.kotlinx.json)
 
     //LOCAL DB
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)
+
+    //DEPENDENCY INJECTION
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
 
     implementation(libs.gson)
 

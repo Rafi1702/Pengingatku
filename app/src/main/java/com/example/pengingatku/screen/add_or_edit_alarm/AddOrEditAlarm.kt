@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AlarmEditScreen(
     onNavigateToTimerList: () -> Unit,
-    timerId: Int?,
+    timerId: Long?,
     alarmRepository: AlarmRepository
 ) {
     val scope = rememberCoroutineScope()
@@ -213,7 +213,7 @@ fun RowScope.WeightBox(
 
 @Composable
 fun loadTimerInformation(
-    timerId: Int?,
+    timerId: Long?,
     alarmRepository: AlarmRepository
 ): State<StateHelper<AlarmInformation?>> {
     return produceState<StateHelper<AlarmInformation?>>(

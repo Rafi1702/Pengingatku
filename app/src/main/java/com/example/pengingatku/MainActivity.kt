@@ -276,9 +276,9 @@ fun AppNavHost(
 
         composable(
             route = ScreenNavigation.EditTimer.route, arguments = listOf(
-                navArgument("timerId") { type = NavType.IntType }
+                navArgument("timerId") { type = NavType.LongType }
             )) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("timerId")
+            val id = backStackEntry.arguments?.getLong("timerId")
 
 
 

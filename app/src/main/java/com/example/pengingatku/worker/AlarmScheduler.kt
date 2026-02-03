@@ -4,18 +4,18 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Build
 import android.util.Log
+import com.example.pengingatku.AlarmInformation
 import com.example.pengingatku.utils.EXTRA_ALARM_ID
 import com.example.pengingatku.utils.EXTRA_PRE_ALARM_ID
-import java.util.Locale
 
 class AlarmScheduler(private val context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    fun callScheduler(minutes: Int, hours: Int, alarmId: Int) {
+    fun callScheduler(alarm: AlarmInformation) {
+        val (label, hours, minutes, _, _, alarmId) = alarm
         Log.d("SCHEDULER", "SCHEDULER WITH alarmId: $alarmId")
         setScheduler(
             alarmId = alarmId,
@@ -62,14 +62,14 @@ class AlarmScheduler(private val context: Context) {
     }
 
     private fun setScheduler(
-        alarmId: Int, minutes: Int, hours: Int,
+        alarmId: Long, minutes: Int, hours: Int,
         applyCalendarCallback: (Calendar.(Long) -> Unit)? = null,
         intent: Intent,
     ) {
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarmId,
+            alarmId.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

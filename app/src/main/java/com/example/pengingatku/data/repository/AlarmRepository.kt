@@ -39,26 +39,24 @@ class AlarmRepository(context: Context, coroutineScope: CoroutineScope) {
         val insertedId = db.alarmDao().insertAlarm(test.copy(isChecked = true).toAlarmEntity())
 
         alarmScheduler.callScheduler(
-            minutes = test.minutes,
-            hours = test.hours,
-            alarmId = insertedId.toInt()
+            newAlarmInformation.copy(id = insertedId)
         )
 
     }
 
-    suspend fun toggleCheck(alarmId: Int, isActive: Boolean) {
+    suspend fun toggleCheck(alarmId: Long, isActive: Boolean) {
         db.alarmDao().updateCheckStatus(alarmId, isActive)
-        alarmScheduler.cancelScheduler(
-            alarmId = alarmId,
-            isAlarmActive = isActive
-        )
+//        alarmScheduler.cancelScheduler(
+//            alarmId = alarmId,
+//            isAlarmActive = isActive
+//        )
     }
 
     suspend fun updateAlarm(newAlarmInformation: AlarmInformation) {
         db.alarmDao().updateAlarm(newAlarmInformation.toAlarmEntity())
     }
 
-    suspend fun findAlarmById(alarmId: Int): AlarmInformation? {
+    suspend fun findAlarmById(alarmId: Long): AlarmInformation? {
         return db.alarmDao().getAlarmById(alarmId)?.fromAlarmEntity()
     }
 

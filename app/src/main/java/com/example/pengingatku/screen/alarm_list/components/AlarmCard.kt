@@ -35,7 +35,7 @@ import kotlin.uuid.Uuid
 @Composable
 fun TimerCard(
     timerInformation: AlarmInformation,
-    onSelectedTimerInfo: (Int) -> Unit,
+    onSelectedTimerInfo: (Long) -> Unit,
     onNavigate: () -> Unit
 ) {
     val (label, hours, minutes, isChecked, pickedDays, id) = timerInformation

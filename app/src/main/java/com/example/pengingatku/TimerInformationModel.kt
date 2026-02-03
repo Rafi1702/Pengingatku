@@ -18,7 +18,7 @@ data class AlarmInformation(
     val minutes: Int,
     val isChecked: Boolean = false,
     val pickedDays: List<Day>  =emptyList(),
-    val id: Int
+    val id: Long,
 ){
     val getTimeAdverb = if(hours < 12) AdverbOfTime.AM else AdverbOfTime.PM
 }

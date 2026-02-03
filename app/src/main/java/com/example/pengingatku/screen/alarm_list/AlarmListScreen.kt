@@ -29,7 +29,7 @@ import kotlin.uuid.Uuid
 @Composable
 fun AlarmListScreen(
     alarmRepository: AlarmRepository,
-    onNavigate: (Int) -> Unit
+    onNavigate: (Long) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
