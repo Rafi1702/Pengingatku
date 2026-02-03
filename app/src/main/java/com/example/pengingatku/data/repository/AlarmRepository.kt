@@ -41,8 +41,9 @@ class AlarmRepository(
         val insertedId =
             appDatabase.alarmDao().insertAlarm(test.copy(isChecked = true).toAlarmEntity())
 
+        Log.d("REPOSITORY", "INSERTED ALARM ID $insertedId")
         alarmScheduler.callScheduler(
-            newAlarmInformation.copy(id = insertedId)
+            test.copy(id = insertedId)
         )
 
     }

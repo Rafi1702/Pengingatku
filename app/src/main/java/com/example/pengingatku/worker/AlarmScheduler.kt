@@ -16,7 +16,7 @@ class AlarmScheduler(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     fun callScheduler(alarm: AlarmInformation) {
         val (label, hours, minutes, _, _, alarmId) = alarm
-        Log.d("SCHEDULER", "SCHEDULER WITH alarmId: $alarmId")
+        Log.d("SCHEDULER", "SCHEDULER WITH alarmId: $alarmId, $hours, $minutes")
         setScheduler(
             alarmId = alarmId,
             minutes = minutes,
@@ -33,9 +33,11 @@ class AlarmScheduler(private val context: Context) {
                 },
         )
 
+        Log.d("SCHEDULER","")
+
 
         setScheduler(
-            alarmId = alarmId,
+            alarmId = alarmId + 1000,
             minutes = minutes - 5,
             hours = hours,
             intent = Intent(context, PreAlarmReceiver::class.java)
@@ -77,9 +79,12 @@ class AlarmScheduler(private val context: Context) {
         val scheduleTime = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hours)
             set(Calendar.MINUTE, minutes)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            applyCalendarCallback?.invoke(this, this.timeInMillis)
         }
 
-        applyCalendarCallback?.invoke(scheduleTime, scheduleTime.timeInMillis)
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             alarmManager.setExactAndAllowWhileIdle(

@@ -20,13 +20,14 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 //        context.startForegroundService(Intent(context, AlarmService::class.java))
-        val alarmId = intent.getIntExtra(EXTRA_ALARM_ID, 0)
+        val alarmId = intent.getLongExtra(EXTRA_ALARM_ID, 0)
+        Log.d("RECEIVER", "ALARM ID: $alarmId")
         buildNotification(
             context = context,
             notificationName = "Alarm Notification $alarmId",
             channelId = ALARM_NOTIFICATION_CHANNEL_ID,
-            notificationId = alarmId,
-            requestCode = alarmId,
+            notificationId = alarmId.toInt(),
+            requestCode = alarmId.toInt(),
             importanceNotificationChannelLevel = 5,
             notificationDescription = "Alarm Notification",
             intent = intent,
@@ -39,6 +40,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
             },
         )
+
+        Log.d("RECEIVER", "ALARM RECEIVER FINISHED")
 
     }
 }
