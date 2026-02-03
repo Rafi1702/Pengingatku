@@ -43,7 +43,6 @@ import org.koin.compose.koinInject
 fun AlarmEditScreen(
     onNavigateToTimerList: () -> Unit,
     timerId: Long?,
-
 ) {
     val alarmRepository = koinInject<AlarmRepository>()
     val scope = rememberCoroutineScope()
@@ -68,6 +67,7 @@ fun AlarmEditScreen(
                 },
                 title = { Text("Hapus ${originalTimerInformation.label}?") },
                 confirmButton = {
+
                     TextButton(onClick = {
                         scope.launch {
                             alarmRepository.deleteAlarm(originalTimerInformation)
@@ -156,11 +156,15 @@ fun AlarmEditScreen(
                 }
 
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    TextButton(modifier = Modifier.weight(1f), onClick = {
-                        showDialog.value = true
-                    }) {
-                        Text("Delete")
+
+                    timerId?.let{
+                        TextButton(modifier = Modifier.weight(1f), onClick = {
+                            showDialog.value = true
+                        }) {
+                            Text("Delete")
+                        }
                     }
+
                     TextButton(
                         modifier = Modifier.weight(1f),
                         enabled = isValueChanged.value,
